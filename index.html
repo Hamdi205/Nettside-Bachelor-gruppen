@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gruppe [X] — Backend, Sikkerhet & Fullstack</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+
+  /* ============ DESIGN TOKENS ============ */
+  :root{
+    /* base palette — solid colors only, no gradients */
+    --ink:        #14171C;
+    --ink-soft:   #1D2128;
+    --paper:      #ECEEF0;
+    --paper-soft: #E1E4E8;
+    --line-dark:  #2B3038;
+    --line-light: #C9CCD2;
+    --text-dark:  #F2F3F1;
+    --text-light: #14171C;
+    --muted-dark: #8A909B;
+    --muted-light:#5B6270;
+
+    /* aksentfarge — turkis */
+    --accent: #3E8E85;
+    --accent-text: #F2F3F1;
+
+    /* type */
+    --font-display: 'Space Grotesk', 'IBM Plex Sans', sans-serif;
+    --font-body: 'Inter', 'IBM Plex Sans', sans-serif;
+    --font-mono: 'IBM Plex Mono', monospace;
+
+    --bg: var(--paper);
+    --bg-soft: var(--paper-soft);
+    --fg: var(--text-light);
+    --muted: var(--muted-light);
+    --line: var(--line-light);
+    --surface: #FFFFFF;
+  }
+
+  [data-mode="dark"]{
+    --bg: var(--ink);
+    --bg-soft: var(--ink-soft);
+    --fg: var(--text-dark);
+    --muted: var(--muted-dark);
+    --line: var(--line-dark);
+    --surface: #191D24;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--fg);
+    font-family:var(--font-body);
+    font-size:16px;
+    line-height:1.5;
+    transition:background .35s ease, color .35s ease;
+    overflow-x:hidden;
+  }
+  ::selection{ background:var(--accent); color:var(--accent-text); }
+
+  a{color:inherit; text-decoration:none;}
+  ul{list-style:none;}
+  img{max-width:100%; display:block;}
+
+  .wrap{
+    max-width:1180px;
+    margin:0 auto;
+    padding:0 32px;
+  }
+  section{ position:relative; padding:120px 0; border-bottom:1px solid var(--line); }
+  section:last-of-type{ border-bottom:none; }
+
+  .eyebrow{
+    font-family:var(--font-mono);
+    font-size:12px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--accent);
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:18px;
+  }
+  .eyebrow::before{
+    content:"";
+    width:7px; height:7px;
+    background:var(--accent);
+    display:inline-block;
+    border-radius:1px;
+  }
+
+  h1,h2,h3{ font-family:var(--font-display); font-weight:600; letter-spacing:-.01em; }
+
+  .btn{
+    font-family:var(--font-mono);
+    font-size:13px;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+    padding:14px 26px;
+    border:1px solid var(--fg);
+    background:transparent;
+    color:var(--fg);
+    cursor:pointer;
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    transition:background .2s ease, color .2s ease, border-color .2s ease;
+  }
+  .btn:hover{ background:var(--fg); color:var(--bg); }
+  .btn.primary{ background:var(--accent); border-color:var(--accent); color:var(--accent-text); }
+  .btn.primary:hover{ background:transparent; color:var(--accent); }
+  .btn:focus-visible, a:focus-visible, button:focus-visible{
+    outline:2px solid var(--accent);
+    outline-offset:3px;
+  }
+
+  /* ============ SCAN-FRAME CORNER BRACKETS ============ */
+  .scan-frame{ position:relative; }
+  .scan-frame::before,
+  .scan-frame::after,
+  .scan-frame .br-tr,
+  .scan-frame .br-bl{
+    content:"";
+    position:absolute;
+    width:16px; height:16px;
+    border-color:var(--accent);
+    border-style:solid;
+    border-width:0;
+    opacity:.85;
+  }
+  .scan-frame::before{ top:-1px; left:-1px; border-top-width:2px; border-left-width:2px; }
+  .scan-frame::after{ bottom:-1px; right:-1px; border-bottom-width:2px; border-right-width:2px; }
+  .scan-frame .br-tr{ top:-1px; right:-1px; border-top-width:2px; border-right-width:2px; }
+  .scan-frame .br-bl{ bottom:-1px; left:-1px; border-bottom-width:2px; border-left-width:2px; }
+
+  /* ============ NAV ============ */
+  .nav{
+    position:fixed; top:0; left:0; right:0; z-index:50;
+    background:var(--bg);
+    border-bottom:1px solid var(--line);
+    transition:background .35s ease, border-color .35s ease;
+  }
+  .nav .wrap{ display:flex; align-items:center; justify-content:space-between; padding-top:18px; padding-bottom:18px; }
+  .nav-brand{ font-family:var(--font-mono); font-size:13px; letter-spacing:.1em; display:flex; align-items:center; gap:10px; }
+  .nav-brand .dot{ width:8px; height:8px; background:var(--accent); border-radius:50%; }
+  .nav-links{ display:flex; gap:34px; font-family:var(--font-mono); font-size:12px; letter-spacing:.08em; text-transform:uppercase; }
+  .nav-links a{ color:var(--muted); transition:color .2s ease; position:relative; }
+  .nav-links a:hover{ color:var(--fg); }
+  .nav-status{ font-family:var(--font-mono); font-size:11px; color:var(--muted); display:flex; align-items:center; gap:8px; }
+  .nav-status .dot{ width:6px; height:6px; background:#5FAE72; border-radius:50%; box-shadow:0 0 0 3px rgba(95,174,114,.18); }
+
+  /* ============ HERO ============ */
+  .hero{
+    padding-top:200px;
+    padding-bottom:140px;
+    background-image:
+      repeating-linear-gradient(to right, var(--line) 0 1px, transparent 1px 64px),
+      repeating-linear-gradient(to bottom, var(--line) 0 1px, transparent 1px 64px);
+    background-position:center top;
+    background-size:64px 64px;
+    -webkit-mask-image:linear-gradient(to bottom, black 0%, black 55%, transparent 100%);
+            mask-image:linear-gradient(to bottom, black 0%, black 55%, transparent 100%);
+  }
+  .hero-inner{ -webkit-mask-image:none; mask-image:none; }
+  .hero .wrap{ position:relative; }
+  .hero-id{
+    font-family:var(--font-mono); font-size:12px; color:var(--muted);
+    display:flex; gap:24px; margin-bottom:40px; flex-wrap:wrap;
+  }
+  .hero-id span b{ color:var(--fg); font-weight:500; }
+
+  .redact-line{ overflow:hidden; display:block; }
+  .redact-word{
+    display:inline-block;
+    position:relative;
+  }
+  .redact-word::after{
+    content:"";
+    position:absolute; inset:0;
+    background:var(--accent);
+    transform-origin:left;
+    animation:unredact .7s cubic-bezier(.65,0,.35,1) forwards;
+    animation-delay:var(--d, 0s);
+  }
+  @keyframes unredact{
+    0%{ transform:scaleX(0); }
+    45%{ transform:scaleX(1); }
+    100%{ transform:scaleX(1); left:101%; }
+  }
+
+  .hero h1{
+    font-size:clamp(40px, 6.4vw, 84px);
+    line-height:1.04;
+    max-width:920px;
+    margin-bottom:34px;
+  }
+  .hero p.lede{
+    font-size:19px;
+    color:var(--muted);
+    max-width:560px;
+    margin-bottom:48px;
+  }
+  .hero-actions{ display:flex; gap:16px; flex-wrap:wrap; margin-bottom:80px; }
+
+  .hero-tags{ display:flex; gap:10px; flex-wrap:wrap; }
+  .tag{
+    font-family:var(--font-mono);
+    font-size:12px;
+    font-weight:500;
+    letter-spacing:.05em;
+    text-transform:uppercase;
+    padding:10px 16px;
+    border:1.5px solid var(--fg);
+    color:var(--fg);
+  }
+
+  /* ============ HERO PHOTO / OPPLASTING ============ */
+  .hero-grid{ display:grid; grid-template-columns:1.15fr .85fr; gap:56px; align-items:center; }
+  .hero-photo-wrap{ position:relative; }
+  .hero-photo-accent{
+    position:absolute;
+    inset:18px -18px -18px 18px;
+    background:var(--accent);
+    transform:rotate(-2.5deg);
+    z-index:0;
+  }
+  .hero-photo{
+    position:relative; z-index:1;
+    aspect-ratio:5/4;
+    background:var(--surface);
+    border:1px solid var(--line);
+    overflow:hidden;
+    cursor:pointer;
+  }
+  .hero-photo img{ width:100%; height:100%; object-fit:cover; display:none; }
+  .hero-photo.has-image img{ display:block; }
+  .hero-photo.has-image .hero-photo-placeholder{ display:none; }
+  .hero-photo-placeholder{
+    position:absolute; inset:0;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px;
+    text-align:center; padding:24px;
+  }
+  .upload-icon{
+    width:38px; height:38px; border:1px dashed var(--muted);
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--font-mono); font-size:18px; color:var(--muted);
+  }
+  .hero-photo-placeholder p{ font-family:var(--font-mono); font-size:12.5px; letter-spacing:.03em; }
+  .hero-photo-placeholder .hint{ font-size:10.5px; color:var(--muted); }
+  .photo-reset{
+    position:absolute; top:10px; right:10px; z-index:2;
+    font-family:var(--font-mono); font-size:10.5px; letter-spacing:.04em; text-transform:uppercase;
+    background:var(--surface); border:1px solid var(--line); padding:6px 10px; cursor:pointer; color:var(--fg);
+    display:none;
+  }
+  .hero-photo.has-image .photo-reset{ display:inline-flex; }
+
+  /* ============ ABOUT ============ */
+  .section-head{ display:flex; justify-content:space-between; align-items:flex-end; gap:40px; margin-bottom:64px; flex-wrap:wrap; }
+  .section-head h2{ font-size:clamp(28px,3.4vw,42px); max-width:560px; }
+  .section-head p{ color:var(--muted); max-width:340px; font-size:14.5px; }
+
+  .about-grid{ display:grid; grid-template-columns:repeat(3, 1fr); gap:1px; background:var(--line); border:1px solid var(--line); }
+  .about-card{ background:var(--bg); padding:32px 28px; }
+  .num{ font-family:var(--font-mono); font-size:12px; color:var(--accent); margin-bottom:18px; display:block; }
+  .about-card h3{ font-size:20px; margin-bottom:12px; }
+  .about-card p{ color:var(--muted); font-size:14px; line-height:1.6; }
+
+  /* sammenslått Om oss + Fokus */
+  section.compact{ padding-top:100px; padding-bottom:96px; }
+  .focus-subhead{ margin-top:56px; margin-bottom:24px; }
+  .focus-subhead h3{ font-family:var(--font-display); font-size:22px; font-weight:600; }
+
+  /* erfaring / praksis-strip */
+  .exp-strip{ margin-top:48px; padding-top:40px; border-top:1px solid var(--line); }
+  .exp-label{ font-family:var(--font-mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); display:block; margin-bottom:16px; }
+  .exp-chips{ display:flex; flex-wrap:wrap; gap:10px; margin-bottom:14px; }
+  .exp-chip{ font-family:var(--font-display); font-weight:600; font-size:14px; padding:10px 16px; border:1px solid var(--line); background:var(--surface); color:var(--fg); }
+  .exp-note{ font-size:11.5px; color:var(--muted); }
+
+  /* ============ FOCUS AREAS ============ */
+  .focus{ background:var(--bg-soft); }
+  .focus-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+  .focus-card{
+    padding:28px 26px;
+    background:var(--surface);
+    border:1px solid var(--line);
+    transition:border-color .2s ease, transform .2s ease;
+  }
+  .focus-card:hover{ border-color:var(--accent); transform:translateY(-3px); }
+  .focus-card .icon{
+    width:34px; height:34px;
+    border:1px solid var(--accent);
+    color:var(--accent);
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--font-mono); font-size:14px;
+    margin-bottom:22px;
+  }
+  .focus-card h4{ font-family:var(--font-display); font-size:16.5px; font-weight:600; margin-bottom:10px; }
+  .focus-card p{ font-size:13.5px; color:var(--muted); line-height:1.6; }
+
+  /* ============ TEAM ============ */
+  .team-grid{ display:flex; flex-direction:column; gap:22px; }
+  .team-row{ display:grid; gap:22px; }
+  .team-row-top{ grid-template-columns:repeat(2, minmax(0,1fr)); max-width:680px; margin:0 auto; width:100%; }
+  .team-row-bottom{ grid-template-columns:repeat(3, minmax(0,1fr)); }
+  .badge{
+    background:var(--surface);
+    border:1px solid var(--line);
+    padding:26px;
+    position:relative;
+  }
+  .badge-top{ display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:22px; }
+  .badge-id{ font-family:var(--font-mono); font-size:11px; color:var(--muted); }
+  .badge-status{ display:flex; align-items:center; gap:6px; font-family:var(--font-mono); font-size:10px; color:#5FAE72; text-transform:uppercase; letter-spacing:.06em; }
+  .badge-status .dot{ width:5px; height:5px; background:#5FAE72; border-radius:50%; }
+  .badge-note{ margin-bottom:16px; }
+  .badge-note label{ display:block; font-family:var(--font-mono); font-size:10px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); margin-bottom:6px; }
+  .badge-note textarea{
+    width:100%; min-height:56px; resize:vertical;
+    font-family:var(--font-body); font-size:12.5px; line-height:1.5;
+    padding:9px 11px; border:1px solid var(--line); background:var(--bg-soft); color:var(--fg);
+  }
+  .badge-note textarea::placeholder{ color:var(--muted); }
+  .badge-note textarea:focus{ outline:2px solid var(--accent); outline-offset:1px; border-color:var(--accent); }
+  .badge-photo{
+    width:100%; aspect-ratio:4/3;
+    background:var(--bg-soft);
+    border:1px solid var(--line);
+    margin-bottom:20px;
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--font-mono); font-size:11px; color:var(--muted);
+    text-align:center; padding:12px;
+  }
+  .badge h3{ font-size:19px; margin-bottom:4px; }
+  .badge .role{ font-family:var(--font-mono); font-size:12px; color:var(--accent); margin-bottom:18px; }
+  .badge-skills{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:22px; }
+  .skill{ font-size:11px; font-family:var(--font-mono); padding:5px 9px; background:var(--bg-soft); color:var(--muted); border:1px solid var(--line); }
+  .badge-links{ display:flex; gap:14px; border-top:1px solid var(--line); padding-top:16px; }
+  .badge-links a{ font-family:var(--font-mono); font-size:11px; color:var(--muted); transition:color .2s ease; }
+  .badge-links a:hover{ color:var(--accent); }
+
+  /* ============ CONTACT ============ */
+  .contact{ background:var(--bg-soft); }
+  .contact-inner{ display:grid; grid-template-columns:1.2fr .8fr; gap:60px; align-items:end; }
+  .contact h2{ font-size:clamp(30px,4vw,50px); max-width:520px; margin-bottom:24px; }
+  .contact p{ color:var(--muted); max-width:440px; margin-bottom:36px; font-size:15px; }
+  .contact-details{ font-family:var(--font-mono); font-size:14px; }
+  .contact-details div{ padding:18px 0; border-top:1px solid var(--line); display:flex; justify-content:space-between; gap:20px; }
+  .contact-details div:last-child{ border-bottom:1px solid var(--line); }
+  .contact-details span:first-child{ color:var(--muted); }
+
+  footer{ padding:36px 0; }
+  footer .wrap{ display:flex; justify-content:space-between; font-family:var(--font-mono); font-size:11px; color:var(--muted); flex-wrap:wrap; gap:10px; }
+
+  /* ============ REVEAL ON SCROLL ============ */
+  .reveal{ opacity:0; transform:translateY(18px); transition:opacity .6s ease, transform .6s ease; }
+  .reveal.visible{ opacity:1; transform:translateY(0); }
+
+  @media (max-width: 860px){
+    .about-grid, .focus-grid, .team-grid{ grid-template-columns:1fr; }
+    .team-row-top, .team-row-bottom{ grid-template-columns:1fr; max-width:420px; margin-left:auto; margin-right:auto; }
+    .contact-inner{ grid-template-columns:1fr; }
+    .hero-grid{ grid-template-columns:1fr; gap:40px; }
+    .hero-photo-wrap{ order:-1; max-width:420px; }
+    .nav-links{ display:none; }
+    section{ padding:80px 0; }
+    .hero{ padding-top:150px; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; scroll-behavior:auto !important; }
+  }
+</style>
+</head>
+<body data-mode="light">
+
+  <!-- ============ NAV ============ -->
+  <nav class="nav">
+    <div class="wrap">
+      <div class="nav-brand"><span class="dot"></span> GRUPPE·[X] // BACKEND & SIKKERHET</div>
+      <div class="nav-links">
+        <a href="#om">Om oss</a>
+        <a href="#team">Team</a>
+        <a href="#fokus">Fokus</a>
+        <a href="#kontakt">Kontakt</a>
+      </div>
+      <div class="nav-status"><span class="dot"></span> STATUS: TILGJENGELIG</div>
+    </div>
+  </nav>
+
+  <!-- ============ HERO ============ -->
+  <header class="hero">
+    <div class="wrap hero-inner">
+      <div class="hero-grid">
+        <div class="hero-content">
+          <div class="eyebrow">Bachelorgruppe · Refresh IT 2026</div>
+          <div class="hero-id">
+            <span>FELT: <b>Backend, sikkerhet &amp; fullstack</b></span>
+            <span>MEDLEMMER: <b>5</b></span>
+          </div>
+
+          <h1>
+            <span class="redact-line"><span class="redact-word" style="--d:.1s">Vi&nbsp;bygger</span></span>
+            <span class="redact-line"><span class="redact-word" style="--d:.35s">robuste&nbsp;løsninger</span></span>
+            <span class="redact-line"><span class="redact-word" style="--d:.6s">fra&nbsp;bunn&nbsp;til&nbsp;topp.</span></span>
+          </h1>
+
+          <p class="lede">Gruppe [X] er fem IT studenter som samarbeider om bacheloroppgaven, med bred kompetanse innen backend, sikkerhet og fullstack utvikling — og lyst til å ta fatt på en reell problemstilling.</p>
+
+          <div class="hero-actions">
+            <a href="#team" class="btn primary">Møt teamet →</a>
+            <a href="#kontakt" class="btn">Kontakt oss</a>
+          </div>
+
+          <div class="hero-tags">
+            <span class="tag">Backend</span>
+            <span class="tag">Sikkerhet</span>
+            <span class="tag">Fullstack</span>
+            <span class="tag">Skyløsninger</span>
+            <span class="tag">Systemarkitektur</span>
+          </div>
+        </div>
+
+        <div class="hero-photo-wrap">
+          <div class="hero-photo-accent" aria-hidden="true"></div>
+          <div class="hero-photo scan-frame" id="heroPhotoBox">
+            <input type="file" id="heroPhotoInput" accept="image/*" hidden>
+            <img id="heroPhotoImg" alt="Gruppebilde">
+            <div class="hero-photo-placeholder" id="heroPhotoPlaceholder">
+              <span class="upload-icon">+</span>
+              <p>Last opp gruppebilde</p>
+              <span class="hint">Klikk for å forhåndsvise i prototypen</span>
+            </div>
+            <button type="button" class="photo-reset" id="heroPhotoReset">Bytt bilde ×</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============ OM OSS ============ -->
+  <section id="om" class="compact">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <h2>En gruppe som tar sikkerhet like seriøst som innovasjon.</h2>
+        <p>Kort om hvem vi er, og hva vi kan bidra med i et samarbeid.</p>
+      </div>
+
+      <div class="about-grid reveal">
+        <div class="about-card">
+          <span class="num">01 / BAKGRUNN</span>
+          <h3>En mangfoldig gruppe</h3>
+          <p>Vi er fem IT studenter som fant sammen fordi vi delte de samme ambisjonene: å prestere godt faglig og bygge noe reelt sammen. Vi har hatt suksess i fag og prosjekter tidligere, og har gått fra klassekamerater med samme mål til støttende venner som presser hverandre videre.</p>
+        </div>
+        <div class="about-card">
+          <span class="num">02 / DRIV</span>
+          <h3>Erfaring på siden</h3>
+          <p>Flere av oss bruker tid ved siden av studiet på oppstartsbedriften Landmarker, der vi har lært å bruke AI i praksis — effektivt og trygt. Vi bidrar også frivillig på arrangementer som Tenk-Tech og TechPoint, og er mentorer/lærerassistenter for kullet under oss.</p>
+        </div>
+        <div class="about-card">
+          <span class="num">03 / MÅL</span>
+          <h3>Våre ambisjoner</h3>
+          <p>Vi ønsker å utvikle oss videre innen backend, sikkerhet og praktisk bruk av AI, og finne en oppdragsgiver vi kan skape reell verdi for — både for bedriften, for oss selv og for samfunnet.</p>
+        </div>
+      </div>
+
+      <div class="exp-strip reveal">
+        <span class="exp-label">Praksis &amp; samarbeid</span>
+        <div class="exp-chips">
+          <span class="exp-chip">KPMG</span>
+          <span class="exp-chip">Atea</span>
+          <span class="exp-chip">IBM</span>
+          <span class="exp-chip">IK Start</span>
+          <span class="exp-chip">Kristiansand kommune</span>
+          <span class="exp-chip">Landmarker</span>
+          <span class="exp-chip">Tenk-Tech</span>
+          <span class="exp-chip">TechPoint</span>
+        </div>
+        <p class="exp-note">Plassholder-chips — bytt gjerne ut med offisielle logoer (svart/hvit versjon) når dere har avklart det med hver bedrift.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TEAM ============ -->
+  <section id="team">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <h2>Møt teamet</h2>
+        <p>Fem medlemmer, ulike styrker, ett felles fokus.</p>
+      </div>
+
+      <div class="team-grid reveal">
+
+        <div class="team-row team-row-top">
+          <div class="badge">
+            <div class="badge-top"><span class="badge-id">ID · 001</span><span class="badge-status"><span class="dot"></span>Aktiv</span></div>
+            <div class="badge-photo">[Bilde]</div>
+            <h3>[Navn Navnesen]</h3>
+            <div class="role">[Rolle / tittel]</div>
+            <div class="badge-note">
+              <label>Kort om erfaring</label>
+              <textarea placeholder="Skriv litt om hva du har jobbet med og kan bidra med"></textarea>
+            </div>
+            <div class="badge-skills"><span class="skill">Python</span><span class="skill">ML</span><span class="skill">Sikkerhet</span></div>
+            <div class="badge-links"><a href="#">Mail</a><a href="#">LinkedIn</a><a href="#">GitHub</a></div>
+          </div>
+
+          <div class="badge">
+            <div class="badge-top"><span class="badge-id">ID · 002</span><span class="badge-status"><span class="dot"></span>Aktiv</span></div>
+            <div class="badge-photo">[Bilde]</div>
+            <h3>[Navn Navnesen]</h3>
+            <div class="role">[Rolle / tittel]</div>
+            <div class="badge-note">
+              <label>Kort om erfaring</label>
+              <textarea placeholder="Skriv litt om hva du har jobbet med og kan bidra med"></textarea>
+            </div>
+            <div class="badge-skills"><span class="skill">React</span><span class="skill">UX</span><span class="skill">Figma</span></div>
+            <div class="badge-links"><a href="#">Mail</a><a href="#">LinkedIn</a><a href="#">GitHub</a></div>
+          </div>
+        </div>
+
+        <div class="team-row team-row-bottom">
+          <div class="badge">
+            <div class="badge-top"><span class="badge-id">ID · 003</span><span class="badge-status"><span class="dot"></span>Aktiv</span></div>
+            <div class="badge-photo">[Bilde]</div>
+            <h3>[Navn Navnesen]</h3>
+            <div class="role">[Rolle / tittel]</div>
+            <div class="badge-note">
+              <label>Kort om erfaring</label>
+              <textarea placeholder="Skriv litt om hva du har jobbet med og kan bidra med"></textarea>
+            </div>
+            <div class="badge-skills"><span class="skill">Pentest</span><span class="skill">Linux</span><span class="skill">Nettverk</span></div>
+            <div class="badge-links"><a href="#">Mail</a><a href="#">LinkedIn</a><a href="#">GitHub</a></div>
+          </div>
+
+          <div class="badge">
+            <div class="badge-top"><span class="badge-id">ID · 004</span><span class="badge-status"><span class="dot"></span>Aktiv</span></div>
+            <div class="badge-photo">[Bilde]</div>
+            <h3>[Navn Navnesen]</h3>
+            <div class="role">[Rolle / tittel]</div>
+            <div class="badge-note">
+              <label>Kort om erfaring</label>
+              <textarea placeholder="Skriv litt om hva du har jobbet med og kan bidra med"></textarea>
+            </div>
+            <div class="badge-skills"><span class="skill">C#</span><span class="skill">Cloud</span><span class="skill">DevOps</span></div>
+            <div class="badge-links"><a href="#">Mail</a><a href="#">LinkedIn</a><a href="#">GitHub</a></div>
+          </div>
+
+          <div class="badge">
+            <div class="badge-top"><span class="badge-id">ID · 005</span><span class="badge-status"><span class="dot"></span>Aktiv</span></div>
+            <div class="badge-photo">[Bilde]</div>
+            <h3>[Navn Navnesen]</h3>
+            <div class="role">[Rolle / tittel]</div>
+            <div class="badge-note">
+              <label>Kort om erfaring</label>
+              <textarea placeholder="Skriv litt om hva du har jobbet med og kan bidra med"></textarea>
+            </div>
+            <div class="badge-skills"><span class="skill">Database</span><span class="skill">SQL</span><span class="skill">Personvern</span></div>
+            <div class="badge-links"><a href="#">Mail</a><a href="#">LinkedIn</a><a href="#">GitHub</a></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FOKUSOMRÅDER ============ -->
+  <section id="fokus" class="focus">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <h2>Hva vi interesserer oss for</h2>
+        <p>Konkrete områder innen backend, sikkerhet og fullstack vi kan bidra med i et samarbeid.</p>
+      </div>
+
+      <div class="focus-grid reveal">
+        <div class="focus-card"><div class="icon">01</div><h4>Backend utvikling</h4><p>Robuste API-er og systemer som skalerer, bygget med språk og rammeverk vi behersker godt.</p></div>
+        <div class="focus-card"><div class="icon">02</div><h4>Sikkerhet</h4><p>Fra sikker arkitektur til praktisk penetrasjonstesting og trusselmodellering.</p></div>
+        <div class="focus-card"><div class="icon">03</div><h4>Fullstack løsninger</h4><p>Vi leverer hele veien — fra database og backend til et grensesnitt som fungerer i praksis.</p></div>
+        <div class="focus-card"><div class="icon">04</div><h4>Skyløsninger</h4><p>Drift og infrastruktur i skyen, med fokus på pålitelighet og sikker konfigurasjon.</p></div>
+        <div class="focus-card"><div class="icon">05</div><h4>Systemarkitektur</h4><p>Design av systemer som er enkle å forstå, teste og videreutvikle over tid.</p></div>
+        <div class="focus-card"><div class="icon">06</div><h4>AI i praksis</h4><p>Vi følger med på hvordan AI kan brukes effektivt og trygt — uten at det er hele spissen vår.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ KONTAKT ============ -->
+  <section id="kontakt" class="contact">
+    <div class="wrap contact-inner">
+      <div class="reveal">
+        <div class="eyebrow">Åpen for samarbeid</div>
+        <h2>Har dere en problemstilling innen backend, sikkerhet eller fullstack?</h2>
+        <p>Vi ønsker å samarbeide med en bedrift om en reell problemstilling for vår bacheloroppgave. Ta kontakt, så tar vi en prat.</p>
+        <a href="#" class="btn primary">Send oss en melding →</a>
+      </div>
+      <div class="contact-details reveal">
+        <div><span>E-post</span><span>[gruppe@epost.no]</span></div>
+        <div><span>Telefon</span><span>[+47 000 00 000]</span></div>
+        <div><span>Studiested</span><span>[Universitet / Campus]</span></div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      <span>© 2026 GRUPPE [X] — DESIGNPROTOTYPE</span>
+      <span>BYGGET FOR REFRESH IT</span>
+    </div>
+  </footer>
+
+<script>
+  // hero gruppebilde — opplasting/forhåndsvisning (kun lokalt i nettleseren, lagres ikke)
+  (function(){
+    var box = document.getElementById('heroPhotoBox');
+    var input = document.getElementById('heroPhotoInput');
+    var img = document.getElementById('heroPhotoImg');
+    var resetBtn = document.getElementById('heroPhotoReset');
+    if(!box) return;
+    box.addEventListener('click', function(e){
+      if(e.target === resetBtn) return;
+      if(!box.classList.contains('has-image')) input.click();
+    });
+    input.addEventListener('change', function(){
+      var file = input.files && input.files[0];
+      if(!file) return;
+      var reader = new FileReader();
+      reader.onload = function(e){
+        img.src = e.target.result;
+        box.classList.add('has-image');
+      };
+      reader.readAsDataURL(file);
+    });
+    resetBtn.addEventListener('click', function(e){
+      e.stopPropagation();
+      box.classList.remove('has-image');
+      img.removeAttribute('src');
+      input.value = '';
+    });
+  })();
+
+  // scroll reveal
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(entry.isIntersecting){ entry.target.classList.add('visible'); io.unobserve(entry.target); }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+</script>
+
+</body>
+</html>
