@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gruppe [X] — Backend, Sikkerhet & Fullstack</title>
+<title>Rootline — Backend, Sikkerhet & Fullstack</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -342,8 +342,9 @@
     font-family:var(--font-mono); font-size:11px; color:var(--muted);
     text-align:center; padding:12px;
   }
+  .badge-photo img{ width:100%; height:100%; object-fit:cover; object-position:center 24%; }
   .badge h3{ font-size:19px; margin-bottom:4px; }
-  .badge .role{ font-family:var(--font-mono); font-size:12px; color:var(--accent); margin-bottom:18px; }
+  .badge .role{ font-family:var(--font-mono); font-size:12px; color:var(--accent); margin-bottom:18px; white-space:normal; overflow-wrap:anywhere; }
   .badge-skills{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:22px; }
   .skill{ font-size:11px; font-family:var(--font-mono); padding:5px 9px; background:var(--bg-soft); color:var(--muted); border:1px solid var(--line); }
   .badge-links{ display:flex; gap:14px; border-top:1px solid var(--line); padding-top:16px; }
@@ -351,15 +352,12 @@
   .badge-links a:hover{ color:var(--accent); }
 
   /* ============ CONTACT ============ */
-  .contact{ background:var(--bg-soft); }
-  .contact-inner{ display:grid; grid-template-columns:1.2fr .8fr; gap:60px; align-items:start; }
+  .contact{ position:relative; isolation:isolate; background:var(--bg-soft); overflow:hidden; }
+  .contact::before{ content:""; position:absolute; inset:0; background:url("assets/group-photo.png/GruppebildeNR2.PNG") center/cover no-repeat; opacity:.50; z-index:-2; }
+  .contact::after{ content:""; position:absolute; inset:0; background:var(--bg-soft); opacity:.30; z-index:-1; }
+  .contact-inner{ position:relative; z-index:1; display:grid; grid-template-columns:1.2fr .8fr; gap:60px; align-items:start; }
   .contact h2{ font-size:clamp(30px,4vw,50px); max-width:520px; margin-bottom:24px; }
   .contact p{ color:var(--muted); max-width:440px; margin-bottom:36px; font-size:15px; }
-  .contact-details{ align-self:start; font-family:var(--font-mono); font-size:14px; padding:26px 28px; border:1px solid var(--line); background:var(--surface); }
-  .contact-details div{ padding:18px 0; border-top:1px solid var(--line); display:grid; grid-template-columns:100px minmax(0,1fr); align-items:start; gap:20px; }
-  .contact-details div:last-child{ border-bottom:1px solid var(--line); }
-  .contact-details span:first-child{ color:var(--muted); }
-  .contact-details span:last-child{ overflow-wrap:anywhere; line-height:1.55; }
 
   footer{ padding:36px 0; }
   footer .wrap{ display:flex; justify-content:space-between; font-family:var(--font-mono); font-size:11px; color:var(--muted); flex-wrap:wrap; gap:10px; }
@@ -372,7 +370,6 @@
     .about-grid, .focus-grid, .team-grid{ grid-template-columns:1fr; }
     .team-row-top, .team-row-bottom{ grid-template-columns:1fr; max-width:420px; margin-left:auto; margin-right:auto; }
     .contact-inner{ grid-template-columns:1fr; }
-    .contact-details{ width:100%; }
     .hero-grid{ grid-template-columns:1fr; gap:40px; }
     .hero-photo-wrap{ order:-1; max-width:420px; width:100%; transform:none; }
     .hero-grid .hero-content{ width:100%; }
@@ -392,7 +389,7 @@
   <!-- ============ NAV ============ -->
   <nav class="nav">
     <div class="wrap">
-      <div class="nav-brand"><span class="dot"></span> GRUPPE·[X] // BACKEND & SIKKERHET</div>
+      <div class="nav-brand"><span class="dot"></span> ROOTLINE // BACKEND &amp; SIKKERHET</div>
       <div class="nav-links">
         <a href="#om">Om oss</a>
         <a href="#team">Team</a>
@@ -417,10 +414,11 @@
           <h1>
             <span class="redact-line"><span class="redact-word" style="--d:.1s">Vi bygger</span></span>
             <span class="redact-line"><span class="redact-word" style="--d:.35s">skalerbare løsninger</span></span>
-            <span class="redact-line"><span class="redact-word" style="--d:.6s">som produserer resultater</span></span>
+            <span class="redact-line"><span class="redact-word" style="--d:.6s">som produserer</span></span>
+            <span class="redact-line"><span class="redact-word" style="--d:.85s">resultater</span></span>
           </h1>
 
-          <p class="lede">Gruppe [X] er fem IT studenter som samarbeider om bacheloroppgaven, med bred kompetanse innen backend, sikkerhet og fullstack utvikling — og lyst til å ta fatt på en reell problemstilling.</p>
+          <p class="lede">Rootline er fem IT studenter som samarbeider om bacheloroppgaven, med bred kompetanse innen backend, sikkerhet og fullstack utvikling. Vi har lyst til å ta fatt på en reell problemstilling.</p>
 
           <div class="hero-actions">
             <a href="#team" class="btn primary">Møt teamet →</a>
@@ -438,11 +436,11 @@
         <div class="hero-photo-wrap">
           <div class="hero-photo-accent" aria-hidden="true"></div>
           <div class="hero-photo scan-frame" id="heroPhotoBox">
-            <img id="heroPhotoImg" src="assets/group-photo.png/Eks. Gruppebilde for Bach.avif" alt="Gruppebilde">
+            <img id="heroPhotoImg" src="assets/group-photo.png/Gruppebilde.PNG" alt="Gruppebilde">
             <div class="hero-photo-placeholder" id="heroPhotoPlaceholder">
               <span class="upload-icon">+</span>
               <p>Gruppebilde</p>
-              <span class="hint">Legg filen i assets/group-photo.png</span>
+              <span class="hint">Fast gruppebilde</span>
             </div>
           </div>
         </div>
@@ -508,9 +506,9 @@
         <div class="team-row team-row-top">
           <div class="badge">
             <div class="badge-top"><span class="badge-id">ID · 001</span><span class="badge-status"><span class="dot"></span>Aktiv</span></div>
-            <div class="badge-photo">[Bilde]</div>
-            <h3>[Navn Navnesen]</h3>
-            <div class="role">[Rolle / tittel]</div>
+            <div class="badge-photo"><img src="assets/Portretter/HamdiPortrett.PNG" alt="Hamdi"></div>
+            <h3>Hamdi A Dagane</h3>
+            <div class="role">Praktikant på KPMG, Mentor/LA og Teamleder i Landmarker</div>
             <div class="badge-note">
               <label>Kort om erfaring</label>
               <textarea placeholder="Skriv litt om hva du har jobbet med og kan bidra med"></textarea>
@@ -521,9 +519,9 @@
 
           <div class="badge">
             <div class="badge-top"><span class="badge-id">ID · 002</span><span class="badge-status"><span class="dot"></span>Aktiv</span></div>
-            <div class="badge-photo">[Bilde]</div>
-            <h3>[Navn Navnesen]</h3>
-            <div class="role">[Rolle / tittel]</div>
+            <div class="badge-photo"><img src="assets/Portretter/LauriePorttrett.PNG" alt="Laurie"></div>
+            <h3>Laurie Shima Niyongabo</h3>
+            <div class="role">Praktikant hos IBM, Utvikler for Akaranga og trainee hos Landmarker</div>
             <div class="badge-note">
               <label>Kort om erfaring</label>
               <textarea placeholder="Skriv litt om hva du har jobbet med og kan bidra med"></textarea>
@@ -536,9 +534,9 @@
         <div class="team-row team-row-bottom">
           <div class="badge">
             <div class="badge-top"><span class="badge-id">ID · 003</span><span class="badge-status"><span class="dot"></span>Aktiv</span></div>
-            <div class="badge-photo">[Bilde]</div>
-            <h3>[Navn Navnesen]</h3>
-            <div class="role">[Rolle / tittel]</div>
+            <div class="badge-photo"><img src="assets/Portretter/EliasPortrett.PNG" alt="Elias"></div>
+            <h3>Elias Simossa Rike Nahiry</h3>
+            <div class="role">Praktikant hos IK Start, Mentor/LA og trainee hos Landmarker</div>
             <div class="badge-note">
               <label>Kort om erfaring</label>
               <textarea placeholder="Skriv litt om hva du har jobbet med og kan bidra med"></textarea>
@@ -605,16 +603,12 @@
         <h2>Har dere en problemstilling innen backend, sikkerhet eller fullstack?</h2>
         <p>Vi ønsker å samarbeide med en bedrift om en reell problemstilling for vår bacheloroppgave. Ta kontakt, så tar vi en prat.</p>
       </div>
-      <div class="contact-details reveal">
-        <div><span>E-post</span><span>hamdiad@uia.no</span></div>
-        <div><span>Studiested</span><span>Universitet i Agder - Kristiansand Campus</span></div>
-      </div>
     </div>
   </section>
 
   <footer>
     <div class="wrap">
-      <span>© 2026 GRUPPE [X] — DESIGNPROTOTYPE</span>
+      <span>© 2026 ROOTLINE — DESIGNPROTOTYPE</span>
       <span>BYGGET FOR REFRESH IT</span>
     </div>
   </footer>
