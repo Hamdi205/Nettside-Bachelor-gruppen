@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rootline — Backend, Sikkerhet & Fullstack</title>
+<title>Pentastack</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -145,13 +145,11 @@
     transition:background .35s ease, border-color .35s ease;
   }
   .nav .wrap{ display:flex; align-items:center; justify-content:space-between; padding-top:18px; padding-bottom:18px; }
-  .nav-brand{ font-family:var(--font-mono); font-size:13px; letter-spacing:.1em; display:flex; align-items:center; gap:10px; }
-  .nav-brand .dot{ width:8px; height:8px; background:var(--accent); border-radius:50%; }
+  .nav-brand{ font-family:var(--font-mono); font-size:13px; letter-spacing:.1em; }
+  .nav-brand img{ width:150px; height:auto; }
   .nav-links{ display:flex; gap:34px; font-family:var(--font-mono); font-size:12px; letter-spacing:.08em; text-transform:uppercase; }
   .nav-links a{ color:var(--muted); transition:color .2s ease; position:relative; }
   .nav-links a:hover{ color:var(--fg); }
-  .nav-status{ font-family:var(--font-mono); font-size:11px; color:var(--muted); display:flex; align-items:center; gap:8px; }
-  .nav-status .dot{ width:6px; height:6px; background:#5FAE72; border-radius:50%; box-shadow:0 0 0 3px rgba(95,174,114,.18); }
 
   /* ============ HERO ============ */
   .hero{
@@ -324,15 +322,6 @@
   .badge-id{ font-family:var(--font-mono); font-size:11px; color:var(--muted); }
   .badge-status{ display:flex; align-items:center; gap:6px; font-family:var(--font-mono); font-size:10px; color:#5FAE72; text-transform:uppercase; letter-spacing:.06em; }
   .badge-status .dot{ width:5px; height:5px; background:#5FAE72; border-radius:50%; }
-  .badge-note{ margin-bottom:16px; }
-  .badge-note label{ display:block; font-family:var(--font-mono); font-size:10px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); margin-bottom:6px; }
-  .badge-note textarea{
-    width:100%; min-height:56px; resize:vertical;
-    font-family:var(--font-body); font-size:12.5px; line-height:1.5;
-    padding:9px 11px; border:1px solid var(--line); background:var(--bg-soft); color:var(--fg);
-  }
-  .badge-note textarea::placeholder{ color:var(--muted); }
-  .badge-note textarea:focus{ outline:2px solid var(--accent); outline-offset:1px; border-color:var(--accent); }
   .badge-photo{
     width:100%; aspect-ratio:4/3;
     background:var(--bg-soft);
@@ -345,8 +334,6 @@
   .badge-photo img{ width:100%; height:100%; object-fit:cover; object-position:center 24%; }
   .badge h3{ font-size:19px; margin-bottom:4px; }
   .badge .role{ font-family:var(--font-mono); font-size:12px; color:var(--accent); margin-bottom:18px; white-space:normal; overflow-wrap:anywhere; }
-  .badge-skills{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:22px; }
-  .skill{ font-size:11px; font-family:var(--font-mono); padding:5px 9px; background:var(--bg-soft); color:var(--muted); border:1px solid var(--line); }
   .badge-links{ display:flex; gap:14px; border-top:1px solid var(--line); padding-top:16px; }
   .badge-links a{ font-family:var(--font-mono); font-size:11px; color:var(--muted); transition:color .2s ease; }
   .badge-links a:hover{ color:var(--accent); }
@@ -360,7 +347,7 @@
   .contact p{ color:var(--muted); max-width:440px; margin-bottom:36px; font-size:15px; }
 
   footer{ padding:36px 0; }
-  footer .wrap{ display:flex; justify-content:space-between; font-family:var(--font-mono); font-size:11px; color:var(--muted); flex-wrap:wrap; gap:10px; }
+  footer .wrap{ display:flex; justify-content:space-between; align-items:center; font-family:var(--font-mono); font-size:11px; color:var(--muted); flex-wrap:wrap; gap:24px; }
 
   /* ============ REVEAL ON SCROLL ============ */
   .reveal{ opacity:0; transform:translateY(18px); transition:opacity .6s ease, transform .6s ease; }
@@ -389,14 +376,13 @@
   <!-- ============ NAV ============ -->
   <nav class="nav">
     <div class="wrap">
-      <div class="nav-brand"><span class="dot"></span> ROOTLINE // BACKEND &amp; SIKKERHET</div>
+      <div class="nav-brand"><img src="assets/pentastack-logo.svg" alt="Pentastack"></div>
       <div class="nav-links">
         <a href="#om">Om oss</a>
         <a href="#team">Team</a>
         <a href="#fokus">Fokus</a>
         <a href="#kontakt">Kontakt</a>
       </div>
-      <div class="nav-status"><span class="dot"></span> STATUS: TILGJENGELIG</div>
     </div>
   </nav>
 
@@ -418,7 +404,7 @@
             <span class="redact-line"><span class="redact-word" style="--d:.85s">resultater</span></span>
           </h1>
 
-          <p class="lede">Rootline er fem IT studenter som samarbeider om bacheloroppgaven, med bred kompetanse innen backend, sikkerhet og fullstack utvikling. Vi har lyst til å ta fatt på en reell problemstilling.</p>
+          <p class="lede">Pentastack er fem IT-studenter som samarbeider om bacheloroppgaven. Vi har lyst til å ta fatt på en reell problemstilling.</p>
 
           <div class="hero-actions">
             <a href="#team" class="btn primary">Møt teamet →</a>
@@ -452,8 +438,8 @@
   <section id="om" class="compact">
     <div class="wrap">
       <div class="section-head reveal">
-        <h2>En gruppe som tar sikkerhet like seriøst som innovasjon.</h2>
-        <p>Kort om hvem vi er, og hva vi kan bidra med i et samarbeid.</p>
+        <h2>Fem utviklere. En komplett teknisk stack.</h2>
+        <p>Penta står for de fem utviklerne i teamet. Stack representerer arkitekturen vi spesialiserer oss i, fra backend og infrastruktur til sikkerhet og AI.</p>
       </div>
 
       <div class="about-grid reveal">
@@ -487,6 +473,7 @@
           <span class="exp-chip"><img src="assets/logos/Techpoint.png" alt="TechPoint"></span>
           <span class="exp-chip text-logo">Akaranga</span>
           <span class="exp-chip"><img src="assets/logos/Yi2.png" alt="Yi2"></span>
+          <span class="exp-chip"><img src="assets/logos/UIA.png" alt="Universitetet i Agder"></span>
         </div>
         <p class="exp-note">Logoene vises i en nøytral presentasjon for å holde uttrykket samlet.</p>
       </div>
@@ -509,12 +496,7 @@
             <div class="badge-photo"><img src="assets/Portretter/HamdiPortrett.PNG" alt="Hamdi"></div>
             <h3>Hamdi A Dagane</h3>
             <div class="role">Praktikant på KPMG, Mentor/LA og Teamleder i Landmarker</div>
-            <div class="badge-note">
-              <label>Kort om erfaring</label>
-              <textarea placeholder="Skriv litt om hva du har jobbet med og kan bidra med"></textarea>
-            </div>
-            <div class="badge-skills"><span class="skill">Software Development</span><span class="skill">Leadership &amp; Collaboration</span><span class="skill">Communication &amp; People Skills</span></div>
-            <div class="badge-links"><a href="#">Mail</a><a href="#">LinkedIn</a><a href="#">GitHub</a></div>
+            <div class="badge-links"><a href="mailto:hamdi2005dagane@hotmail.com">Mail</a><a href="https://www.linkedin.com/in/hamdi-a-dagane-592a52226/">LinkedIn</a><a href="https://github.com/Hamdi205">GitHub</a></div>
           </div>
 
           <div class="badge">
@@ -522,11 +504,6 @@
             <div class="badge-photo"><img src="assets/Portretter/LauriePorttrett.PNG" alt="Laurie"></div>
             <h3>Laurie Shima Niyongabo</h3>
             <div class="role">Praktikant hos IBM, Utvikler for Akaranga og trainee hos Landmarker</div>
-            <div class="badge-note">
-              <label>Kort om erfaring</label>
-              <textarea placeholder="Gjennom studiet har jeg jobbet med backend-utvikling i C#, databaser, UX og Docker-baserte løsninger i prosjektarbeid. Utenom studiet utvikler jeg en plattform for organisasjonen Akaranga alene, med auth og sikkerhet satt opp fra bunn. Har i tillegg praksis hos IBM Consulting og utviklerjobb hos Hartech, og bidrar med backend, databasedesign og sikkerhet."></textarea>
-            </div>
-            <div class="badge-skills"><span class="skill">Fullstack Development</span><span class="skill">Databases &amp; Data Modeling</span><span class="skill">Security &amp; Authentication</span><span class="skill">UX &amp; Design</span></div>
             <div class="badge-links">
               <a href="mailto:laurie.niyongabo@gmail.com">Mail</a>
               <a href="https://www.linkedin.com/in/laurie-shima-niyongabo-3408b9352/">LinkedIn</a>
@@ -540,11 +517,6 @@
             <div class="badge-photo"><img src="assets/Portretter/EliasPortrett.PNG" alt="Elias"></div>
             <h3>Elias Simossa Rike Nahiry</h3>
             <div class="role">Praktikant hos IK Start, Mentor/LA og trainee hos Landmarker</div>
-            <div class="badge-note">
-              <label>Kort om erfaring</label>
-              <textarea placeholder="Skriv litt om hva du har jobbet med og kan bidra med"></textarea>
-            </div>
-            <div class="badge-skills"><span class="skill">Pentest</span><span class="skill">Linux</span><span class="skill">Nettverk</span></div>
             <div class="badge-links"><a href="#">Mail</a><a href="#">LinkedIn</a><a href="#">GitHub</a></div>
           </div>
 
@@ -553,11 +525,6 @@
             <div class="badge-photo"><img src="assets\Portretter\ErzaPortrett.PNG"></div>
             <h3>Erza Malici</h3>
             <div class="role">Praktikant hos Atea, arrangør av Techpoint Future, og trainee hos Landmarker</div>
-            <div class="badge-note">
-              <label>Kort om erfaring</label>
-              <textarea placeholder="Skriv litt om hva du har jobbet med og kan bidra med"></textarea>
-            </div>
-            <div class="badge-skills"><span class="skill">SQL</span><span class="skill">UX</span><span class="skill">Database</span></div>
             <div class="badge-links"><a href="mailto:erzam@uia.no">Mail</a><a href="https://www.linkedin.com/in/erza-malici/">LinkedIn</a><a href="https://github.com/erzamalici">GitHub</a></div>
           </div>
 
@@ -566,11 +533,6 @@
             <div class="badge-photo">[Bilde]</div>
             <h3>[Navn Navnesen]</h3>
             <div class="role">[Rolle / tittel]</div>
-            <div class="badge-note">
-              <label>Kort om erfaring</label>
-              <textarea placeholder="Skriv litt om hva du har jobbet med og kan bidra med"></textarea>
-            </div>
-            <div class="badge-skills"><span class="skill">Database</span><span class="skill">SQL</span><span class="skill">Personvern</span></div>
             <div class="badge-links"><a href="#">Mail</a><a href="#">LinkedIn</a><a href="#">GitHub</a></div>
           </div>
         </div>
@@ -611,7 +573,7 @@
 
   <footer>
     <div class="wrap">
-      <span>© 2026 ROOTLINE — DESIGNPROTOTYPE</span>
+      <span>© 2026 PENTASTACK</span>
       <span>BYGGET FOR REFRESH IT</span>
     </div>
   </footer>
