@@ -325,43 +325,62 @@
   .focus-card p{ font-size:13.5px; color:var(--muted); line-height:1.6; }
 
   /* ============ TEAM ============ */
-  .team-grid{ display:flex; flex-direction:column; gap:22px; }
-  .team-row{ display:grid; gap:22px; }
-  .team-row-top{ grid-template-columns:repeat(2, minmax(0,1fr)); max-width:680px; margin:0 auto; width:100%; }
-  .team-row-bottom{ grid-template-columns:repeat(3, minmax(0,1fr)); }
+  .team-grid{ display:grid; grid-template-columns:repeat(6, minmax(0,1fr)); gap:22px; }
+  .badge{ grid-column:span 2; }
+  .badge:nth-child(1){ grid-column:2 / 4; }
+  .badge:nth-child(2){ grid-column:4 / 6; }
   .badge{
     background:var(--surface);
     border:1px solid var(--line);
-    padding:26px;
     position:relative;
-    white-space:nowrap;
+    display:flex; flex-direction:column;
+    overflow:hidden;
+    transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease;
   }
-  .badge-top{ display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:22px; }
-  .badge-id{ font-family:var(--font-mono); font-size:11px; color:var(--muted); }
-  .badge-status{ display:flex; align-items:center; gap:6px; font-family:var(--font-mono); font-size:10px; color:#5FAE72; text-transform:uppercase; letter-spacing:.06em; }
-  .badge-status .dot{ width:5px; height:5px; background:#5FAE72; border-radius:50%; }
   .badge-photo{
-    width:100%; aspect-ratio:4/3;
+    position:relative;
+    aspect-ratio:5/6;
     background:var(--bg-soft);
-    border:1px solid var(--line);
-    margin-bottom:20px;
-    display:flex; align-items:center; justify-content:center;
-    font-family:var(--font-mono); font-size:11px; color:var(--muted);
-    text-align:center; padding:12px;
+    overflow:hidden;
   }
-  .badge-photo img{ width:100%; height:100%; object-fit:cover; object-position:center 24%; }
-  .badge h3{ font-size:19px; margin-bottom:4px; }
-  .badge .role{ font-family:var(--font-mono); font-size:12px; color:var(--accent); margin-bottom:18px; white-space:normal; overflow-wrap:anywhere; }
-  .badge-links{ display:flex; gap:14px; border-top:1px solid var(--line); padding-top:16px; }
-  .badge-links a{ font-family:var(--font-mono); font-size:11px; color:var(--muted); transition:color .2s ease; }
+  .badge-photo img{ width:100%; height:100%; object-fit:cover; object-position:center 22%; transition:transform .6s cubic-bezier(.2,.7,.2,1); }
+  /* turkis strek som tegnes inn under bildet ved hover */
+  .badge-photo::after{
+    content:""; position:absolute; left:0; right:0; bottom:0; height:3px;
+    background:var(--accent); transform:scaleX(0); transform-origin:left;
+    transition:transform .4s cubic-bezier(.65,0,.35,1);
+  }
+  .badge-id, .badge-status{
+    position:absolute; top:14px; z-index:1;
+    font-family:var(--font-mono); font-size:10.5px; letter-spacing:.06em; text-transform:uppercase;
+    padding:6px 9px; background:var(--surface); border:1px solid var(--line);
+  }
+  .badge-id{ left:14px; color:var(--muted); }
+  .badge-status{ right:14px; display:flex; align-items:center; gap:6px; color:#3E8E5A; }
+  .badge-status .dot{ width:6px; height:6px; background:#5FAE72; border-radius:50%; animation:pulse 2.4s ease-in-out infinite; }
+  @keyframes pulse{ 0%,100%{ box-shadow:0 0 0 0 rgb(95 174 114 / .55); } 50%{ box-shadow:0 0 0 5px rgb(95 174 114 / 0); } }
+  .badge-body{ display:flex; flex-direction:column; flex:1; padding:22px 24px 20px; }
+  .badge h3{ font-size:20px; margin-bottom:8px; }
+  .badge .role{ font-size:14px; line-height:1.55; color:var(--muted); margin-bottom:20px; }
+  .badge-links{ display:flex; align-items:center; gap:14px; margin-top:auto; border-top:1px solid var(--line); padding-top:16px; }
+  .badge-links a{ font-family:var(--font-mono); font-size:11px; color:var(--muted); transition:color .2s ease; position:relative; z-index:2; }
   .badge-links a:hover{ color:var(--accent); }
-  .badge:has(.profile-trigger){ transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
-  .badge:has(.profile-trigger):hover{ border-color:var(--accent); }
+  .badge:hover{ border-color:var(--accent); }
+  .badge:hover .badge-photo::after{ transform:scaleX(1); }
   @media (hover: hover) and (prefers-reduced-motion: no-preference){
-    .badge:has(.profile-trigger):hover{ transform:translateY(-4px); box-shadow:0 8px 20px rgb(20 23 28 / .10); }
+    .badge:hover{ transform:translateY(-6px); box-shadow:0 14px 30px rgb(20 23 28 / .12); }
+    .badge:hover .badge-photo img{ transform:scale(1.05); }
   }
-  .badge-links a{ position:relative; z-index:2; }
-  .profile-trigger{ display:block; margin-top:18px; border:0; background:none; color:var(--accent); font:12px var(--font-mono); cursor:pointer; }
+  /* kortene glir inn ett etter ett */
+  .team-grid.reveal{ opacity:1; transform:none; }
+  .team-grid:not(.visible) .badge{ opacity:0; }
+  .team-grid.visible .badge{ animation:cardIn .7s cubic-bezier(.2,.7,.2,1) backwards; }
+  .team-grid.visible .badge:nth-child(2){ animation-delay:.08s; }
+  .team-grid.visible .badge:nth-child(3){ animation-delay:.16s; }
+  .team-grid.visible .badge:nth-child(4){ animation-delay:.24s; }
+  .team-grid.visible .badge:nth-child(5){ animation-delay:.32s; }
+  @keyframes cardIn{ from{ opacity:0; transform:translateY(28px); } }
+  .profile-trigger{ margin-left:auto; border:0; background:none; color:var(--accent); font:12px var(--font-mono); cursor:pointer; white-space:nowrap; }
   .profile-trigger::after{ content:""; position:absolute; inset:0; }
   .badge:has(.profile-trigger:focus-visible){ outline:2px solid var(--accent); outline-offset:3px; }
   body.profile-open{ overflow:hidden; }
@@ -406,8 +425,10 @@
   .reveal.visible{ opacity:1; transform:translateY(0); }
 
   @media (max-width: 860px){
-    .about-grid, .focus-grid, .team-grid{ grid-template-columns:1fr; }
-    .team-row-top, .team-row-bottom{ grid-template-columns:1fr; max-width:420px; margin-left:auto; margin-right:auto; }
+    .about-grid, .focus-grid{ grid-template-columns:1fr; }
+    .team-grid{ grid-template-columns:repeat(2, minmax(0,1fr)); gap:16px; }
+    .team-grid .badge{ grid-column:auto; }
+    .team-grid .badge:last-child{ grid-column:1 / -1; justify-self:center; width:calc(50% - 8px); }
     .contact-inner{ grid-template-columns:1fr; }
     .hero-grid{ grid-template-columns:1fr; gap:40px; }
     .hero-photo-wrap{ order:-1; max-width:420px; width:100%; transform:none; }
@@ -418,7 +439,13 @@
     .hero{ padding-top:150px; }
   }
 
+  @media (max-width: 560px){
+    .team-grid{ grid-template-columns:1fr; max-width:400px; margin:0 auto; }
+    .team-grid .badge:last-child{ width:auto; justify-self:stretch; }
+  }
+
   @media (prefers-reduced-motion: reduce){
+    .badge-status .dot{ animation:none !important; }
     *{ animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; scroll-behavior:auto !important; }
   }
 </style>
@@ -549,54 +576,70 @@
       </div>
 
       <div class="team-grid reveal">
-
-        <div class="team-row team-row-top">
-          <div class="badge">
-            <div class="badge-top"><span class="badge-id">ID · 001</span><span class="badge-status"><span class="dot"></span>Aktiv</span></div>
-            <div class="badge-photo"><img src="assets/Portretter/HamdiPortrett.PNG" alt="Hamdi"></div>
+        <article class="badge">
+          <div class="badge-photo">
+            <img src="assets/Portretter/HamdiPortrett.jpg" alt="Hamdi" loading="lazy">
+            <span class="badge-id">ID · 001</span>
+            <span class="badge-status"><span class="dot"></span>Aktiv</span>
+          </div>
+          <div class="badge-body">
             <h3>Hamdi A Dagane</h3>
-            <div class="role">Praktikant på KPMG, Mentor/LA og Teamleder i Landmarker</div>
+            <p class="role">Praktikant på KPMG, Mentor/LA og Teamleder i Landmarker</p>
             <div class="badge-links"><a href="mailto:hamdi2005dagane@hotmail.com">Mail</a><a href="https://www.linkedin.com/in/hamdi-a-dagane-592a52226/">LinkedIn</a><a href="https://github.com/Hamdi205">GitHub</a></div>
           </div>
+        </article>
 
-          <div class="badge">
-            <div class="badge-top"><span class="badge-id">ID · 002</span><span class="badge-status"><span class="dot"></span>Aktiv</span></div>
-            <div class="badge-photo"><img src="assets/Portretter/LauriePorttrett.PNG" alt="Laurie"></div>
-            <h3>Laurie Shima Niyongabo</h3>
-            <div class="role">Praktikant hos IBM, Utvikler for Akaranga og trainee hos Landmarker</div>
-            <div class="badge-links">
-              <a href="mailto:laurie.niyongabo@gmail.com">Mail</a>
-              <a href="https://www.linkedin.com/in/laurie-shima-niyongabo-3408b9352/">LinkedIn</a>
-              <a href="https://github.com/laurieniyongabo">GitHub</a></div>
+        <article class="badge">
+          <div class="badge-photo">
+            <img src="assets/Portretter/LauriePorttrett.jpg" alt="Laurie" loading="lazy">
+            <span class="badge-id">ID · 002</span>
+            <span class="badge-status"><span class="dot"></span>Aktiv</span>
           </div>
-        </div>
+          <div class="badge-body">
+            <h3>Laurie Shima Niyongabo</h3>
+            <p class="role">Praktikant hos IBM, Utvikler for Akaranga og trainee hos Landmarker</p>
+            <div class="badge-links"><a href="mailto:laurie.niyongabo@gmail.com">Mail</a><a href="https://www.linkedin.com/in/laurie-shima-niyongabo-3408b9352/">LinkedIn</a><a href="https://github.com/laurieniyongabo">GitHub</a></div>
+          </div>
+        </article>
 
-        <div class="team-row team-row-bottom">
-          <div class="badge">
-            <div class="badge-top"><span class="badge-id">ID · 003</span><span class="badge-status"><span class="dot"></span>Aktiv</span></div>
-            <div class="badge-photo"><img src="assets/Portretter/EliasPortrett.PNG" alt="Elias"></div>
+        <article class="badge">
+          <div class="badge-photo">
+            <img src="assets/Portretter/EliasPortrett.jpg" alt="Elias" loading="lazy">
+            <span class="badge-id">ID · 003</span>
+            <span class="badge-status"><span class="dot"></span>Aktiv</span>
+          </div>
+          <div class="badge-body">
             <h3>Elias Simossa Rike Nahiry</h3>
-            <div class="role">Praktikant hos IK Start, Mentor/LA og trainee hos Landmarker</div>
+            <p class="role">Praktikant hos IK Start, Mentor/LA og trainee hos Landmarker</p>
             <div class="badge-links"><a href="mailto:esnahiry@uia.no">Mail</a><a href="https://www.linkedin.com/in/elias-nahiry-025734388/">LinkedIn</a><a href="https://github.com/eliasnahiry">GitHub</a></div>
           </div>
+        </article>
 
-          <div class="badge">
-            <div class="badge-top"><span class="badge-id">ID · 004</span><span class="badge-status"><span class="dot"></span>Aktiv</span></div>
-            <div class="badge-photo"><img src="assets/Portretter/ErzaPortrett.PNG" alt="Erza"></div>
+        <article class="badge">
+          <div class="badge-photo">
+            <img src="assets/Portretter/ErzaPortrett.jpg" alt="Erza" loading="lazy">
+            <span class="badge-id">ID · 004</span>
+            <span class="badge-status"><span class="dot"></span>Aktiv</span>
+          </div>
+          <div class="badge-body">
             <h3>Erza Malici</h3>
-            <div class="role">Praktikant hos Atea, arrangør av Techpoint Future, og trainee hos Landmarker</div>
+            <p class="role">Praktikant hos Atea, arrangør av Techpoint Future, og trainee hos Landmarker</p>
             <div class="badge-links"><a href="mailto:erzam@uia.no">Mail</a><a href="https://www.linkedin.com/in/erza-malici/">LinkedIn</a><a href="https://github.com/erzamalici">GitHub</a></div>
           </div>
+        </article>
 
-          <div class="badge">
-            <div class="badge-top"><span class="badge-id">ID · 005</span><span class="badge-status"><span class="dot"></span>Aktiv</span></div>
-            <div class="badge-photo"><img src="assets/Portretter/JabirPortrett.jpg" alt="Jabir"></div>
+        <article class="badge">
+          <div class="badge-photo">
+            <img src="assets/Portretter/JabirPortrett.jpg" alt="Jabir" loading="lazy">
+            <span class="badge-id">ID · 005</span>
+            <span class="badge-status"><span class="dot"></span>Aktiv</span>
+          </div>
+          <div class="badge-body">
             <h3>Jabir M. Gutale</h3>
-            <div class="role">Praktikant hos Kristiansand Kommune, LA og trainee hos Landmarker</div>
+            <p class="role">Praktikant hos Kristiansand Kommune, LA og trainee hos Landmarker</p>
             <div class="badge-links"><a href="mailto:Jabirmg1911@gmail.com">Mail</a><a href="https://www.linkedin.com/in/jabir-mahamoud-gutale-a01a89219/">LinkedIn</a><a href="https://github.com/JabirMAG">GitHub</a></div>
           </div>
-        </div>
-
+        </article>
       </div>
     </div>
   </section>
@@ -668,7 +711,7 @@
       trigger.setAttribute('aria-label', 'Les mer om ' + name);
       trigger.setAttribute('aria-haspopup', 'dialog');
       trigger.setAttribute('aria-controls', 'profileDialog');
-      card.appendChild(trigger);
+      card.querySelector('.badge-links').appendChild(trigger);
       trigger.addEventListener('click', function(){
         var photo = card.querySelector('.badge-photo img');
         document.getElementById('profileName').textContent = name;
