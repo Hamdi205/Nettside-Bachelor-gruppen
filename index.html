@@ -240,21 +240,7 @@
     overflow:hidden;
     cursor:default;
   }
-  .hero-photo img{ width:100%; height:100%; object-fit:cover; display:none; }
-  .hero-photo.has-image img{ display:block; }
-  .hero-photo.has-image .hero-photo-placeholder{ display:none; }
-  .hero-photo-placeholder{
-    position:absolute; inset:0;
-    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px;
-    text-align:center; padding:24px;
-  }
-  .upload-icon{
-    width:38px; height:38px; border:1px dashed var(--muted);
-    display:flex; align-items:center; justify-content:center;
-    font-family:var(--font-mono); font-size:18px; color:var(--muted);
-  }
-  .hero-photo-placeholder p{ font-family:var(--font-mono); font-size:12.5px; letter-spacing:.03em; }
-  .hero-photo-placeholder .hint{ font-size:10.5px; color:var(--muted); }
+  .hero-photo img{ width:100%; height:100%; object-fit:cover; }
 
   /* ============ ABOUT ============ */
   .section-head{ display:flex; justify-content:space-between; align-items:flex-end; gap:40px; margin-bottom:64px; flex-wrap:wrap; }
@@ -275,15 +261,46 @@
   /* erfaring / praksis-strip */
   .exp-strip{ margin-top:48px; padding-top:40px; border-top:1px solid var(--line); }
   .exp-label{ font-family:var(--font-mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); display:block; margin-bottom:16px; }
-  .exp-chips{ display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:10px; margin-bottom:14px; }
-  .exp-chip{ min-height:84px; padding:14px 18px; border:1px solid var(--line); background:var(--surface); color:var(--fg); display:flex; align-items:center; justify-content:center; }
+  .exp-head{ display:flex; justify-content:space-between; align-items:flex-end; gap:24px; flex-wrap:wrap; margin-bottom:28px; }
+  .exp-head h3{ font-family:var(--font-display); font-size:22px; font-weight:600; }
+  .exp-head p{ color:var(--muted); font-size:14px; max-width:380px; }
+  .exp-head .exp-label{ margin-bottom:10px; }
+
+  /* uendelig logo-karusell: to rader som glir hver sin vei */
+  .marquee-rows{ display:flex; flex-direction:column; gap:14px; }
+  .marquee{
+    --gap:14px;
+    display:flex; gap:var(--gap); overflow:hidden;
+    -webkit-mask-image:linear-gradient(to right, transparent, black 12%, black 88%, transparent);
+            mask-image:linear-gradient(to right, transparent, black 12%, black 88%, transparent);
+  }
+  .marquee-group{
+    flex-shrink:0; display:flex; gap:var(--gap);
+    animation:marquee var(--speed, 38s) linear infinite;
+  }
+  .marquee.reverse .marquee-group{ animation-direction:reverse; }
+  .marquee:hover .marquee-group{ animation-play-state:paused; }
+  @keyframes marquee{ to{ transform:translateX(calc(-100% - var(--gap))); } }
+
+  .exp-chip{
+    flex:0 0 auto; width:190px; height:92px; padding:18px 24px;
+    border:1px solid var(--line); background:var(--surface); color:var(--fg);
+    display:flex; align-items:center; justify-content:center;
+    transition:border-color .2s ease, transform .2s ease, box-shadow .2s ease;
+  }
+  .exp-chip:hover{ border-color:var(--accent); transform:translateY(-3px); box-shadow:0 8px 20px rgb(20 23 28 / .10); }
   .exp-chip img{ width:100%; max-width:132px; max-height:48px; object-fit:contain; }
   .exp-chip.text-logo{ font-family:var(--font-display); font-weight:600; font-size:18px; letter-spacing:-.02em; }
-  .exp-chip.text-logo.small{ font-size:14px; }
-  .exp-note{ font-size:11.5px; color:var(--muted); }
 
   @media (max-width: 700px){
-    .exp-chips{ grid-template-columns:repeat(2, minmax(0,1fr)); }
+    .marquee{ --gap:10px; }
+    .exp-chip{ width:140px; height:72px; padding:12px 16px; }
+    .exp-chip img{ max-height:38px; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .marquee{ -webkit-mask-image:none; mask-image:none; }
+    .marquee-group{ animation:none !important; flex-wrap:wrap; justify-content:center; flex-shrink:1; }
+    .marquee-group[aria-hidden="true"], .marquee-group > [aria-hidden="true"]{ display:none; }
   }
 
   /* ============ FOCUS AREAS ============ */
@@ -307,44 +324,117 @@
   .focus-card h4{ font-family:var(--font-display); font-size:16.5px; font-weight:600; margin-bottom:10px; }
   .focus-card p{ font-size:13.5px; color:var(--muted); line-height:1.6; }
 
+  /* ============ VIDEO ============ */
+  .video-section{
+    --bg:var(--ink); --fg:var(--text-dark); --muted:var(--muted-dark); --line:var(--line-dark); --surface:#191D24;
+    background:var(--bg); color:var(--fg);
+  }
+  .video-wrap{ position:relative; max-width:980px; margin:0 auto; }
+  .video-accent{ position:absolute; inset:18px -18px -18px 18px; background:var(--accent); transform:rotate(-1.2deg); z-index:0; }
+  .video-frame{
+    position:relative; z-index:1;
+    aspect-ratio:16/9; background:#0E1014; border:1px solid var(--line);
+  }
+  .video-frame video{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; background:#0E1014; }
+  .video-frame.is-playing video{ object-fit:contain; }
+  .video-play{
+    position:absolute; inset:0; z-index:2;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px;
+    border:0; cursor:pointer; color:var(--text-dark);
+    background:rgb(14 16 20 / .45);
+    font-family:var(--font-mono); font-size:12px; letter-spacing:.12em; text-transform:uppercase;
+    transition:background .3s ease;
+  }
+  .video-play:hover{ background:rgb(14 16 20 / .25); }
+  .video-play-icon{
+    position:relative; width:84px; height:84px; border-radius:50%;
+    background:var(--accent); display:flex; align-items:center; justify-content:center;
+    transition:transform .3s cubic-bezier(.2,.7,.2,1);
+  }
+  .video-play-icon::before{
+    content:""; margin-left:6px;
+    border-style:solid; border-width:13px 0 13px 21px; border-color:transparent transparent transparent var(--accent-text);
+  }
+  /* ring som pulserer rundt play-knappen */
+  .video-play-icon::after{
+    content:""; position:absolute; inset:0; border-radius:50%; border:2px solid var(--accent);
+    animation:ring 2.2s ease-out infinite;
+  }
+  @keyframes ring{ from{ transform:scale(1); opacity:.9; } to{ transform:scale(1.6); opacity:0; } }
+  .video-play:hover .video-play-icon{ transform:scale(1.08); }
+  .video-frame.is-playing .video-play{ display:none; }
+  .video-empty{
+    position:absolute; inset:0; z-index:2; display:none;
+    flex-direction:column; align-items:center; justify-content:center; gap:10px; text-align:center; padding:24px;
+    background:rgb(14 16 20 / .72);
+    font-family:var(--font-mono); font-size:13px; letter-spacing:.08em; text-transform:uppercase; color:var(--text-dark);
+  }
+  .video-empty span{ font-size:11px; letter-spacing:.04em; text-transform:none; color:var(--muted); }
+  .video-frame.is-empty .video-empty{ display:flex; }
+  .video-frame.is-empty .video-play{ display:none; }
+  @media (max-width: 600px){
+    .video-accent{ inset:10px -8px -10px 8px; }
+    .video-play-icon{ width:64px; height:64px; }
+    .video-play-icon::before{ border-width:10px 0 10px 16px; margin-left:4px; }
+  }
+
   /* ============ TEAM ============ */
-  .team-grid{ display:flex; flex-direction:column; gap:22px; }
-  .team-row{ display:grid; gap:22px; }
-  .team-row-top{ grid-template-columns:repeat(2, minmax(0,1fr)); max-width:680px; margin:0 auto; width:100%; }
-  .team-row-bottom{ grid-template-columns:repeat(3, minmax(0,1fr)); }
+  .team-grid{ display:grid; grid-template-columns:repeat(6, minmax(0,1fr)); gap:22px; }
+  .badge{ grid-column:span 2; }
+  .badge:nth-child(1){ grid-column:2 / 4; }
+  .badge:nth-child(2){ grid-column:4 / 6; }
   .badge{
     background:var(--surface);
     border:1px solid var(--line);
-    padding:26px;
     position:relative;
-    white-space:nowrap;
+    display:flex; flex-direction:column;
+    overflow:hidden;
+    transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease;
   }
-  .badge-top{ display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:22px; }
-  .badge-id{ font-family:var(--font-mono); font-size:11px; color:var(--muted); }
-  .badge-status{ display:flex; align-items:center; gap:6px; font-family:var(--font-mono); font-size:10px; color:#5FAE72; text-transform:uppercase; letter-spacing:.06em; }
-  .badge-status .dot{ width:5px; height:5px; background:#5FAE72; border-radius:50%; }
   .badge-photo{
-    width:100%; aspect-ratio:4/3;
+    position:relative;
+    aspect-ratio:5/6;
     background:var(--bg-soft);
-    border:1px solid var(--line);
-    margin-bottom:20px;
-    display:flex; align-items:center; justify-content:center;
-    font-family:var(--font-mono); font-size:11px; color:var(--muted);
-    text-align:center; padding:12px;
+    overflow:hidden;
   }
-  .badge-photo img{ width:100%; height:100%; object-fit:cover; object-position:center 24%; }
-  .badge h3{ font-size:19px; margin-bottom:4px; }
-  .badge .role{ font-family:var(--font-mono); font-size:12px; color:var(--accent); margin-bottom:18px; white-space:normal; overflow-wrap:anywhere; }
-  .badge-links{ display:flex; gap:14px; border-top:1px solid var(--line); padding-top:16px; }
-  .badge-links a{ font-family:var(--font-mono); font-size:11px; color:var(--muted); transition:color .2s ease; }
+  .badge-photo img{ width:100%; height:100%; object-fit:cover; object-position:center 22%; transition:transform .6s cubic-bezier(.2,.7,.2,1); }
+  /* turkis strek som tegnes inn under bildet ved hover */
+  .badge-photo::after{
+    content:""; position:absolute; left:0; right:0; bottom:0; height:3px;
+    background:var(--accent); transform:scaleX(0); transform-origin:left;
+    transition:transform .4s cubic-bezier(.65,0,.35,1);
+  }
+  .badge-id, .badge-status{
+    position:absolute; top:14px; z-index:1;
+    font-family:var(--font-mono); font-size:10.5px; letter-spacing:.06em; text-transform:uppercase;
+    padding:6px 9px; background:var(--surface); border:1px solid var(--line);
+  }
+  .badge-id{ left:14px; color:var(--muted); }
+  .badge-status{ right:14px; display:flex; align-items:center; gap:6px; color:#3E8E5A; }
+  .badge-status .dot{ width:6px; height:6px; background:#5FAE72; border-radius:50%; animation:pulse 2.4s ease-in-out infinite; }
+  @keyframes pulse{ 0%,100%{ box-shadow:0 0 0 0 rgb(95 174 114 / .55); } 50%{ box-shadow:0 0 0 5px rgb(95 174 114 / 0); } }
+  .badge-body{ display:flex; flex-direction:column; flex:1; padding:22px 24px 20px; }
+  .badge h3{ font-size:20px; margin-bottom:8px; }
+  .badge .role{ font-size:14px; line-height:1.55; color:var(--muted); margin-bottom:20px; }
+  .badge-links{ display:flex; align-items:center; gap:14px; margin-top:auto; border-top:1px solid var(--line); padding-top:16px; }
+  .badge-links a{ font-family:var(--font-mono); font-size:11px; color:var(--muted); transition:color .2s ease; position:relative; z-index:2; }
   .badge-links a:hover{ color:var(--accent); }
-  .badge:has(.profile-trigger){ transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
-  .badge:has(.profile-trigger):hover{ border-color:var(--accent); }
+  .badge:hover{ border-color:var(--accent); }
+  .badge:hover .badge-photo::after{ transform:scaleX(1); }
   @media (hover: hover) and (prefers-reduced-motion: no-preference){
-    .badge:has(.profile-trigger):hover{ transform:translateY(-4px); box-shadow:0 8px 20px rgb(20 23 28 / .10); }
+    .badge:hover{ transform:translateY(-6px); box-shadow:0 14px 30px rgb(20 23 28 / .12); }
+    .badge:hover .badge-photo img{ transform:scale(1.05); }
   }
-  .badge-links a{ position:relative; z-index:2; }
-  .profile-trigger{ display:block; margin-top:18px; border:0; background:none; color:var(--accent); font:12px var(--font-mono); cursor:pointer; }
+  /* kortene glir inn ett etter ett */
+  .team-grid.reveal{ opacity:1; transform:none; }
+  .team-grid:not(.visible) .badge{ opacity:0; }
+  .team-grid.visible .badge{ animation:cardIn .45s cubic-bezier(.2,.7,.2,1) backwards; }
+  .team-grid.visible .badge:nth-child(2){ animation-delay:.05s; }
+  .team-grid.visible .badge:nth-child(3){ animation-delay:.1s; }
+  .team-grid.visible .badge:nth-child(4){ animation-delay:.15s; }
+  .team-grid.visible .badge:nth-child(5){ animation-delay:.2s; }
+  @keyframes cardIn{ from{ opacity:0; transform:translateY(16px); } }
+  .profile-trigger{ margin-left:auto; border:0; background:none; color:var(--accent); font:12px var(--font-mono); cursor:pointer; white-space:nowrap; }
   .profile-trigger::after{ content:""; position:absolute; inset:0; }
   .badge:has(.profile-trigger:focus-visible){ outline:2px solid var(--accent); outline-offset:3px; }
   body.profile-open{ overflow:hidden; }
@@ -375,7 +465,7 @@
 
   /* ============ CONTACT ============ */
   .contact{ position:relative; isolation:isolate; background:var(--bg-soft); overflow:hidden; }
-  .contact::before{ content:""; position:absolute; inset:0; background:url("assets/group-photo.png/GruppebildeNR2.PNG") center/cover no-repeat; opacity:.50; z-index:-2; }
+  .contact::before{ content:""; position:absolute; inset:0; background:url("assets/group-photo.png/GruppebildeNR2.jpg") center/cover no-repeat; opacity:.50; z-index:-2; }
   .contact::after{ content:""; position:absolute; inset:0; background:var(--bg-soft); opacity:.30; z-index:-1; }
   .contact-inner{ position:relative; z-index:1; display:grid; grid-template-columns:1.2fr .8fr; gap:60px; align-items:start; }
   .contact h2{ font-size:clamp(30px,4vw,50px); max-width:520px; margin-bottom:24px; }
@@ -389,8 +479,10 @@
   .reveal.visible{ opacity:1; transform:translateY(0); }
 
   @media (max-width: 860px){
-    .about-grid, .focus-grid, .team-grid{ grid-template-columns:1fr; }
-    .team-row-top, .team-row-bottom{ grid-template-columns:1fr; max-width:420px; margin-left:auto; margin-right:auto; }
+    .about-grid, .focus-grid{ grid-template-columns:1fr; }
+    .team-grid{ grid-template-columns:repeat(2, minmax(0,1fr)); gap:16px; }
+    .team-grid .badge{ grid-column:auto; }
+    .team-grid .badge:last-child{ grid-column:1 / -1; justify-self:center; width:calc(50% - 8px); }
     .contact-inner{ grid-template-columns:1fr; }
     .hero-grid{ grid-template-columns:1fr; gap:40px; }
     .hero-photo-wrap{ order:-1; max-width:420px; width:100%; transform:none; }
@@ -401,7 +493,13 @@
     .hero{ padding-top:150px; }
   }
 
+  @media (max-width: 560px){
+    .team-grid{ grid-template-columns:1fr; max-width:400px; margin:0 auto; }
+    .team-grid .badge:last-child{ width:auto; justify-self:stretch; }
+  }
+
   @media (prefers-reduced-motion: reduce){
+    .badge-status .dot{ animation:none !important; }
     *{ animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; scroll-behavior:auto !important; }
   }
 </style>
@@ -414,6 +512,7 @@
       <div class="nav-brand"><img src="assets/pentastack-logo.svg" alt="Pentastack"></div>
       <div class="nav-links">
         <a href="#om">Om oss</a>
+        <a href="#video">Video</a>
         <a href="#team">Team</a>
         <a href="#fokus">Fokus</a>
         <a href="#kontakt">Kontakt</a>
@@ -457,12 +556,7 @@
         <div class="hero-photo-wrap">
           <div class="hero-photo-accent" aria-hidden="true"></div>
           <div class="hero-photo scan-frame" id="heroPhotoBox">
-            <img id="heroPhotoImg" src="assets/group-photo.png/Gruppebilde.PNG" alt="Gruppebilde">
-            <div class="hero-photo-placeholder" id="heroPhotoPlaceholder">
-              <span class="upload-icon">+</span>
-              <p>Gruppebilde</p>
-              <span class="hint">Fast gruppebilde</span>
-            </div>
+            <img id="heroPhotoImg" src="assets/group-photo.png/Gruppebilde.jpg" alt="Gruppebilde" fetchpriority="high">
           </div>
         </div>
       </div>
@@ -496,19 +590,59 @@
       </div>
 
       <div class="exp-strip reveal">
-        <span class="exp-label">Praksis &amp; samarbeid</span>
-        <div class="exp-chips">
-          <span class="exp-chip"><img src="assets/logos/KPMG.png" alt="KPMG"></span>
-          <span class="exp-chip"><img src="assets/logos/atea.svg" alt="Atea"></span>
-          <span class="exp-chip"><img src="assets/logos/ibm.svg" alt="IBM"></span>
-          <span class="exp-chip"><img src="assets/logos/IK Start.png" alt="IK Start"></span>
-          <span class="exp-chip"><img src="assets/logos/Kristiansand Kommune.png" alt="Kristiansand kommune"></span>
-          <span class="exp-chip"><img src="assets/logos/landmarker.svg" alt="Landmarker"></span>
-          <span class="exp-chip"><img src="assets/logos/tenk-tech.svg" alt="Tenk-Tech"></span>
-          <span class="exp-chip"><img src="assets/logos/Techpoint.png" alt="TechPoint"></span>
-          <span class="exp-chip text-logo">Akaranga</span>
-          <span class="exp-chip"><img src="assets/logos/Yi2.png" alt="Yi2"></span>
-          <span class="exp-chip"><img src="assets/logos/UIA.png" alt="Universitetet i Agder"></span>
+        <div class="exp-head">
+          <div>
+            <span class="exp-label">Praksis &amp; samarbeid</span>
+            <h3>Hvor vi har fått erfaring</h3>
+          </div>
+          <p>Bedrifter og organisasjoner vi har hatt praksis, jobb eller verv hos.</p>
+        </div>
+        <div class="marquee-rows">
+          <div class="marquee" style="--speed:40s">
+            <div class="marquee-group">
+              <span class="exp-chip"><img src="assets/logos/KPMG.png" alt="KPMG"></span>
+              <span class="exp-chip"><img src="assets/logos/atea.svg" alt="Atea"></span>
+              <span class="exp-chip"><img src="assets/logos/ibm.svg" alt="IBM"></span>
+              <span class="exp-chip"><img src="assets/logos/IK Start.png" alt="IK Start"></span>
+              <span class="exp-chip"><img src="assets/logos/Kristiansand Kommune.png" alt="Kristiansand kommune"></span>
+              <span class="exp-chip"><img src="assets/logos/landmarker.svg" alt="Landmarker"></span>
+            </div>
+          </div>
+          <div class="marquee reverse" style="--speed:34s">
+            <div class="marquee-group">
+              <span class="exp-chip"><img src="assets/logos/tenk-tech.svg" alt="Tenk-Tech"></span>
+              <span class="exp-chip"><img src="assets/logos/Techpoint.png" alt="TechPoint"></span>
+              <span class="exp-chip text-logo">Akaranga</span>
+              <span class="exp-chip"><img src="assets/logos/Yi2.png" alt="Yi2"></span>
+              <span class="exp-chip"><img src="assets/logos/UIA.png" alt="Universitetet i Agder"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ VIDEO ============ -->
+  <!-- Legg videofilen i assets/video/pentastack.mp4, så vises den automatisk her. -->
+  <section id="video" class="video-section">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <h2>Bli kjent med oss på video</h2>
+        <p>Hvem vi er, hva vi kan og hva vi ønsker å jobbe med i bacheloroppgaven.</p>
+      </div>
+
+      <div class="video-wrap reveal">
+        <div class="video-accent" aria-hidden="true"></div>
+        <div class="video-frame scan-frame" id="videoFrame">
+          <span class="br-tr"></span><span class="br-bl"></span>
+          <video id="teamVideo" preload="metadata" playsinline poster="assets/group-photo.png/Gruppebilde.jpg">
+            <source src="assets/video/pentastack.mp4" type="video/mp4">
+          </video>
+          <button class="video-play" type="button" id="videoPlay" aria-label="Spill av videoen">
+            <span class="video-play-icon" aria-hidden="true"></span>
+            Se videoen
+          </button>
+          <div class="video-empty">Video kommer snart<span>Vi legger ut videoen vår her straks den er klar.</span></div>
         </div>
       </div>
     </div>
@@ -523,54 +657,70 @@
       </div>
 
       <div class="team-grid reveal">
-
-        <div class="team-row team-row-top">
-          <div class="badge">
-            <div class="badge-top"><span class="badge-id">ID · 001</span><span class="badge-status"><span class="dot"></span>Aktiv</span></div>
-            <div class="badge-photo"><img src="assets/Portretter/HamdiPortrett.PNG" alt="Hamdi"></div>
+        <article class="badge">
+          <div class="badge-photo">
+            <img src="assets/Portretter/HamdiPortrett.jpg" alt="Hamdi">
+            <span class="badge-id">ID · 001</span>
+            <span class="badge-status"><span class="dot"></span>Aktiv</span>
+          </div>
+          <div class="badge-body">
             <h3>Hamdi A Dagane</h3>
-            <div class="role">Praktikant på KPMG, Mentor/LA og Teamleder i Landmarker</div>
+            <p class="role">Praktikant på KPMG, Mentor/LA og Teamleder i Landmarker</p>
             <div class="badge-links"><a href="mailto:hamdi2005dagane@hotmail.com">Mail</a><a href="https://www.linkedin.com/in/hamdi-a-dagane-592a52226/">LinkedIn</a><a href="https://github.com/Hamdi205">GitHub</a></div>
           </div>
+        </article>
 
-          <div class="badge">
-            <div class="badge-top"><span class="badge-id">ID · 002</span><span class="badge-status"><span class="dot"></span>Aktiv</span></div>
-            <div class="badge-photo"><img src="assets/Portretter/LauriePorttrett.PNG" alt="Laurie"></div>
-            <h3>Laurie Shima Niyongabo</h3>
-            <div class="role">Praktikant hos IBM, Utvikler for Akaranga og trainee hos Landmarker</div>
-            <div class="badge-links">
-              <a href="mailto:laurie.niyongabo@gmail.com">Mail</a>
-              <a href="https://www.linkedin.com/in/laurie-shima-niyongabo-3408b9352/">LinkedIn</a>
-              <a href="https://github.com/laurieniyongabo">GitHub</a></div>
+        <article class="badge">
+          <div class="badge-photo">
+            <img src="assets/Portretter/LauriePorttrett.jpg" alt="Laurie">
+            <span class="badge-id">ID · 002</span>
+            <span class="badge-status"><span class="dot"></span>Aktiv</span>
           </div>
-        </div>
+          <div class="badge-body">
+            <h3>Laurie Shima Niyongabo</h3>
+            <p class="role">Praktikant hos IBM, Utvikler for Akaranga og trainee hos Landmarker</p>
+            <div class="badge-links"><a href="mailto:laurie.niyongabo@gmail.com">Mail</a><a href="https://www.linkedin.com/in/laurie-shima-niyongabo-3408b9352/">LinkedIn</a><a href="https://github.com/laurieniyongabo">GitHub</a></div>
+          </div>
+        </article>
 
-        <div class="team-row team-row-bottom">
-          <div class="badge">
-            <div class="badge-top"><span class="badge-id">ID · 003</span><span class="badge-status"><span class="dot"></span>Aktiv</span></div>
-            <div class="badge-photo"><img src="assets/Portretter/EliasPortrett.PNG" alt="Elias"></div>
+        <article class="badge">
+          <div class="badge-photo">
+            <img src="assets/Portretter/EliasPortrett.jpg" alt="Elias">
+            <span class="badge-id">ID · 003</span>
+            <span class="badge-status"><span class="dot"></span>Aktiv</span>
+          </div>
+          <div class="badge-body">
             <h3>Elias Simossa Rike Nahiry</h3>
-            <div class="role">Praktikant hos IK Start, Mentor/LA og trainee hos Landmarker</div>
+            <p class="role">Praktikant hos IK Start, Mentor/LA og trainee hos Landmarker</p>
             <div class="badge-links"><a href="mailto:esnahiry@uia.no">Mail</a><a href="https://www.linkedin.com/in/elias-nahiry-025734388/">LinkedIn</a><a href="https://github.com/eliasnahiry">GitHub</a></div>
           </div>
+        </article>
 
-          <div class="badge">
-            <div class="badge-top"><span class="badge-id">ID · 004</span><span class="badge-status"><span class="dot"></span>Aktiv</span></div>
-            <div class="badge-photo"><img src="assets/Portretter/ErzaPortrett.PNG" alt="Erza"></div>
+        <article class="badge">
+          <div class="badge-photo">
+            <img src="assets/Portretter/ErzaPortrett.jpg" alt="Erza">
+            <span class="badge-id">ID · 004</span>
+            <span class="badge-status"><span class="dot"></span>Aktiv</span>
+          </div>
+          <div class="badge-body">
             <h3>Erza Malici</h3>
-            <div class="role">Praktikant hos Atea, arrangør av Techpoint Future, og trainee hos Landmarker</div>
+            <p class="role">Praktikant hos Atea, arrangør av Techpoint Future, og trainee hos Landmarker</p>
             <div class="badge-links"><a href="mailto:erzam@uia.no">Mail</a><a href="https://www.linkedin.com/in/erza-malici/">LinkedIn</a><a href="https://github.com/erzamalici">GitHub</a></div>
           </div>
+        </article>
 
-          <div class="badge">
-            <div class="badge-top"><span class="badge-id">ID · 005</span><span class="badge-status"><span class="dot"></span>Aktiv</span></div>
-            <div class="badge-photo"><img src="assets/Portretter/JabirPortrett.jpg" alt="Jabir"></div>
+        <article class="badge">
+          <div class="badge-photo">
+            <img src="assets/Portretter/JabirPortrett.jpg" alt="Jabir">
+            <span class="badge-id">ID · 005</span>
+            <span class="badge-status"><span class="dot"></span>Aktiv</span>
+          </div>
+          <div class="badge-body">
             <h3>Jabir M. Gutale</h3>
-            <div class="role">Praktikant hos Kristiansand Kommune, LA og trainee hos Landmarker</div>
+            <p class="role">Praktikant hos Kristiansand Kommune, LA og trainee hos Landmarker</p>
             <div class="badge-links"><a href="mailto:Jabirmg1911@gmail.com">Mail</a><a href="https://www.linkedin.com/in/jabir-mahamoud-gutale-a01a89219/">LinkedIn</a><a href="https://github.com/JabirMAG">GitHub</a></div>
           </div>
-        </div>
-
+        </article>
       </div>
     </div>
   </section>
@@ -642,7 +792,7 @@
       trigger.setAttribute('aria-label', 'Les mer om ' + name);
       trigger.setAttribute('aria-haspopup', 'dialog');
       trigger.setAttribute('aria-controls', 'profileDialog');
-      card.appendChild(trigger);
+      card.querySelector('.badge-links').appendChild(trigger);
       trigger.addEventListener('click', function(){
         var photo = card.querySelector('.badge-photo img');
         document.getElementById('profileName').textContent = name;
@@ -668,26 +818,51 @@
     });
   })();
 
-  // Vis fast gruppebilde når bildefilen finnes lokalt.
+  // Video: vis play-knapp, eller «kommer snart» hvis filen mangler.
   (function(){
-    var box = document.getElementById('heroPhotoBox');
-    var img = document.getElementById('heroPhotoImg');
-    if(!box || !img) return;
-    img.addEventListener('load', function(){
-        box.classList.add('has-image');
+    var frame = document.getElementById('videoFrame');
+    var video = document.getElementById('teamVideo');
+    var play = document.getElementById('videoPlay');
+    if(!frame || !video) return;
+    var source = video.querySelector('source');
+    function markEmpty(){ frame.classList.add('is-empty'); }
+    if(source) source.addEventListener('error', markEmpty);
+    video.addEventListener('error', markEmpty);
+    if(video.networkState === HTMLMediaElement.NETWORK_NO_SOURCE) markEmpty();
+    play.addEventListener('click', function(){
+      frame.classList.add('is-playing');
+      video.controls = true;
+      video.play();
+      video.focus();
     });
-    img.addEventListener('error', function(){
-      img.removeAttribute('src');
-    });
-    if(img.complete && img.naturalWidth > 0) box.classList.add('has-image');
   })();
+
+  // Dupliser logoene slik at karusellen går i en sømløs løkke.
+  document.querySelectorAll('.marquee').forEach(function(row){
+    var group = row.querySelector('.marquee-group');
+    // Gjenta logoene til gruppen er minst like bred som raden, så det aldri blir hull.
+    var items = Array.prototype.slice.call(group.children);
+    var widest = Math.max(row.clientWidth, 1600);
+    for(var i = 0; group.scrollWidth < widest && i < 6; i++){
+      items.forEach(function(item){
+        var copy = item.cloneNode(true);
+        copy.setAttribute('aria-hidden', 'true');
+        copy.querySelectorAll('img').forEach(function(img){ img.alt = ''; });
+        group.appendChild(copy);
+      });
+    }
+    var clone = group.cloneNode(true);
+    clone.setAttribute('aria-hidden', 'true');
+    clone.querySelectorAll('img').forEach(function(img){ img.alt = ''; });
+    row.appendChild(clone);
+  });
 
   // scroll reveal
   var io = new IntersectionObserver(function(entries){
     entries.forEach(function(entry){
       if(entry.isIntersecting){ entry.target.classList.add('visible'); io.unobserve(entry.target); }
     });
-  }, { threshold: 0.15 });
+  }, { threshold: 0, rootMargin: '0px 0px -60px 0px' });
   document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
 </script>
 
