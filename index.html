@@ -324,6 +324,60 @@
   .focus-card h4{ font-family:var(--font-display); font-size:16.5px; font-weight:600; margin-bottom:10px; }
   .focus-card p{ font-size:13.5px; color:var(--muted); line-height:1.6; }
 
+  /* ============ VIDEO ============ */
+  .video-section{
+    --bg:var(--ink); --fg:var(--text-dark); --muted:var(--muted-dark); --line:var(--line-dark); --surface:#191D24;
+    background:var(--bg); color:var(--fg);
+  }
+  .video-wrap{ position:relative; max-width:980px; margin:0 auto; }
+  .video-accent{ position:absolute; inset:18px -18px -18px 18px; background:var(--accent); transform:rotate(-1.2deg); z-index:0; }
+  .video-frame{
+    position:relative; z-index:1;
+    aspect-ratio:16/9; background:#0E1014; border:1px solid var(--line);
+  }
+  .video-frame video{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; background:#0E1014; }
+  .video-frame.is-playing video{ object-fit:contain; }
+  .video-play{
+    position:absolute; inset:0; z-index:2;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px;
+    border:0; cursor:pointer; color:var(--text-dark);
+    background:rgb(14 16 20 / .45);
+    font-family:var(--font-mono); font-size:12px; letter-spacing:.12em; text-transform:uppercase;
+    transition:background .3s ease;
+  }
+  .video-play:hover{ background:rgb(14 16 20 / .25); }
+  .video-play-icon{
+    position:relative; width:84px; height:84px; border-radius:50%;
+    background:var(--accent); display:flex; align-items:center; justify-content:center;
+    transition:transform .3s cubic-bezier(.2,.7,.2,1);
+  }
+  .video-play-icon::before{
+    content:""; margin-left:6px;
+    border-style:solid; border-width:13px 0 13px 21px; border-color:transparent transparent transparent var(--accent-text);
+  }
+  /* ring som pulserer rundt play-knappen */
+  .video-play-icon::after{
+    content:""; position:absolute; inset:0; border-radius:50%; border:2px solid var(--accent);
+    animation:ring 2.2s ease-out infinite;
+  }
+  @keyframes ring{ from{ transform:scale(1); opacity:.9; } to{ transform:scale(1.6); opacity:0; } }
+  .video-play:hover .video-play-icon{ transform:scale(1.08); }
+  .video-frame.is-playing .video-play{ display:none; }
+  .video-empty{
+    position:absolute; inset:0; z-index:2; display:none;
+    flex-direction:column; align-items:center; justify-content:center; gap:10px; text-align:center; padding:24px;
+    background:rgb(14 16 20 / .72);
+    font-family:var(--font-mono); font-size:13px; letter-spacing:.08em; text-transform:uppercase; color:var(--text-dark);
+  }
+  .video-empty span{ font-size:11px; letter-spacing:.04em; text-transform:none; color:var(--muted); }
+  .video-frame.is-empty .video-empty{ display:flex; }
+  .video-frame.is-empty .video-play{ display:none; }
+  @media (max-width: 600px){
+    .video-accent{ inset:10px -8px -10px 8px; }
+    .video-play-icon{ width:64px; height:64px; }
+    .video-play-icon::before{ border-width:10px 0 10px 16px; margin-left:4px; }
+  }
+
   /* ============ TEAM ============ */
   .team-grid{ display:grid; grid-template-columns:repeat(6, minmax(0,1fr)); gap:22px; }
   .badge{ grid-column:span 2; }
@@ -458,6 +512,7 @@
       <div class="nav-brand"><img src="assets/pentastack-logo.svg" alt="Pentastack"></div>
       <div class="nav-links">
         <a href="#om">Om oss</a>
+        <a href="#video">Video</a>
         <a href="#team">Team</a>
         <a href="#fokus">Fokus</a>
         <a href="#kontakt">Kontakt</a>
@@ -562,6 +617,32 @@
               <span class="exp-chip"><img src="assets/logos/UIA.png" alt="Universitetet i Agder"></span>
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ VIDEO ============ -->
+  <!-- Legg videofilen i assets/video/pentastack.mp4, så vises den automatisk her. -->
+  <section id="video" class="video-section">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <h2>Bli kjent med oss på video</h2>
+        <p>Hvem vi er, hva vi kan og hva vi ønsker å jobbe med i bacheloroppgaven.</p>
+      </div>
+
+      <div class="video-wrap reveal">
+        <div class="video-accent" aria-hidden="true"></div>
+        <div class="video-frame scan-frame" id="videoFrame">
+          <span class="br-tr"></span><span class="br-bl"></span>
+          <video id="teamVideo" preload="metadata" playsinline poster="assets/group-photo.png/Gruppebilde.jpg">
+            <source src="assets/video/pentastack.mp4" type="video/mp4">
+          </video>
+          <button class="video-play" type="button" id="videoPlay" aria-label="Spill av videoen">
+            <span class="video-play-icon" aria-hidden="true"></span>
+            Se videoen
+          </button>
+          <div class="video-empty">Video kommer snart<span>Vi legger ut videoen vår her straks den er klar.</span></div>
         </div>
       </div>
     </div>
@@ -734,6 +815,25 @@
     dialog.addEventListener('close', function(){
       document.body.classList.remove('profile-open');
       if(opener) opener.focus({ preventScroll:true });
+    });
+  })();
+
+  // Video: vis play-knapp, eller «kommer snart» hvis filen mangler.
+  (function(){
+    var frame = document.getElementById('videoFrame');
+    var video = document.getElementById('teamVideo');
+    var play = document.getElementById('videoPlay');
+    if(!frame || !video) return;
+    var source = video.querySelector('source');
+    function markEmpty(){ frame.classList.add('is-empty'); }
+    if(source) source.addEventListener('error', markEmpty);
+    video.addEventListener('error', markEmpty);
+    if(video.networkState === HTMLMediaElement.NETWORK_NO_SOURCE) markEmpty();
+    play.addEventListener('click', function(){
+      frame.classList.add('is-playing');
+      video.controls = true;
+      video.play();
+      video.focus();
     });
   })();
 
