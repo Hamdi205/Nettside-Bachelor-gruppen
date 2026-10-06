@@ -428,12 +428,12 @@
   /* kortene glir inn ett etter ett */
   .team-grid.reveal{ opacity:1; transform:none; }
   .team-grid:not(.visible) .badge{ opacity:0; }
-  .team-grid.visible .badge{ animation:cardIn .7s cubic-bezier(.2,.7,.2,1) backwards; }
-  .team-grid.visible .badge:nth-child(2){ animation-delay:.08s; }
-  .team-grid.visible .badge:nth-child(3){ animation-delay:.16s; }
-  .team-grid.visible .badge:nth-child(4){ animation-delay:.24s; }
-  .team-grid.visible .badge:nth-child(5){ animation-delay:.32s; }
-  @keyframes cardIn{ from{ opacity:0; transform:translateY(28px); } }
+  .team-grid.visible .badge{ animation:cardIn .45s cubic-bezier(.2,.7,.2,1) backwards; }
+  .team-grid.visible .badge:nth-child(2){ animation-delay:.05s; }
+  .team-grid.visible .badge:nth-child(3){ animation-delay:.1s; }
+  .team-grid.visible .badge:nth-child(4){ animation-delay:.15s; }
+  .team-grid.visible .badge:nth-child(5){ animation-delay:.2s; }
+  @keyframes cardIn{ from{ opacity:0; transform:translateY(16px); } }
   .profile-trigger{ margin-left:auto; border:0; background:none; color:var(--accent); font:12px var(--font-mono); cursor:pointer; white-space:nowrap; }
   .profile-trigger::after{ content:""; position:absolute; inset:0; }
   .badge:has(.profile-trigger:focus-visible){ outline:2px solid var(--accent); outline-offset:3px; }
@@ -659,7 +659,7 @@
       <div class="team-grid reveal">
         <article class="badge">
           <div class="badge-photo">
-            <img src="assets/Portretter/HamdiPortrett.jpg" alt="Hamdi" loading="lazy">
+            <img src="assets/Portretter/HamdiPortrett.jpg" alt="Hamdi">
             <span class="badge-id">ID · 001</span>
             <span class="badge-status"><span class="dot"></span>Aktiv</span>
           </div>
@@ -672,7 +672,7 @@
 
         <article class="badge">
           <div class="badge-photo">
-            <img src="assets/Portretter/LauriePorttrett.jpg" alt="Laurie" loading="lazy">
+            <img src="assets/Portretter/LauriePorttrett.jpg" alt="Laurie">
             <span class="badge-id">ID · 002</span>
             <span class="badge-status"><span class="dot"></span>Aktiv</span>
           </div>
@@ -685,7 +685,7 @@
 
         <article class="badge">
           <div class="badge-photo">
-            <img src="assets/Portretter/EliasPortrett.jpg" alt="Elias" loading="lazy">
+            <img src="assets/Portretter/EliasPortrett.jpg" alt="Elias">
             <span class="badge-id">ID · 003</span>
             <span class="badge-status"><span class="dot"></span>Aktiv</span>
           </div>
@@ -698,7 +698,7 @@
 
         <article class="badge">
           <div class="badge-photo">
-            <img src="assets/Portretter/ErzaPortrett.jpg" alt="Erza" loading="lazy">
+            <img src="assets/Portretter/ErzaPortrett.jpg" alt="Erza">
             <span class="badge-id">ID · 004</span>
             <span class="badge-status"><span class="dot"></span>Aktiv</span>
           </div>
@@ -711,7 +711,7 @@
 
         <article class="badge">
           <div class="badge-photo">
-            <img src="assets/Portretter/JabirPortrett.jpg" alt="Jabir" loading="lazy">
+            <img src="assets/Portretter/JabirPortrett.jpg" alt="Jabir">
             <span class="badge-id">ID · 005</span>
             <span class="badge-status"><span class="dot"></span>Aktiv</span>
           </div>
@@ -862,7 +862,7 @@
     entries.forEach(function(entry){
       if(entry.isIntersecting){ entry.target.classList.add('visible'); io.unobserve(entry.target); }
     });
-  }, { threshold: 0.15 });
+  }, { threshold: 0, rootMargin: '0px 0px -60px 0px' });
   document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
 </script>
 
