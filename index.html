@@ -474,6 +474,26 @@
   footer{ padding:36px 0; }
   footer .wrap{ display:flex; justify-content:space-between; align-items:center; font-family:var(--font-mono); font-size:11px; color:var(--muted); flex-wrap:wrap; gap:24px; }
 
+  /* ============ SIGNATUR: logo-reveal som avslutning ============ */
+  /* bakgrunnen matcher hjørnefargen i videoen, og kantene tones ut, så filmen smelter inn i flaten */
+  footer.signoff{
+    --muted:var(--muted-dark); --line:#1C2A2B;
+    background:#0D1718; color:var(--text-dark);
+    padding:72px 0 32px; overflow:hidden;
+  }
+  .signoff-stage{ position:relative; width:min(960px, 100%); margin:0 auto 56px; aspect-ratio:1280/420; }
+  .signoff-stage video{
+    position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block;
+    -webkit-mask-image:radial-gradient(ellipse 50% 50% at center, black 78%, transparent 100%);
+            mask-image:radial-gradient(ellipse 50% 50% at center, black 78%, transparent 100%);
+  }
+  footer.signoff .wrap{ border-top:1px solid var(--line); padding-top:28px; }
+  @media (max-width: 700px){
+    footer.signoff{ padding-top:40px; }
+    /* logoen ligger midt i en bred ramme, så vi beskjærer sidene på mobil */
+    .signoff-stage{ width:125%; margin-left:-12.5%; margin-bottom:32px; }
+  }
+
   /* ============ REVEAL ON SCROLL ============ */
   .reveal{ opacity:0; transform:translateY(18px); transition:opacity .6s ease, transform .6s ease; }
   .reveal.visible{ opacity:1; transform:translateY(0); }
@@ -755,7 +775,12 @@
     </div>
   </section>
 
-  <footer>
+  <footer class="signoff">
+    <div class="signoff-stage" aria-hidden="true">
+      <video id="logoReveal" muted playsinline preload="none" poster="assets/video/logo-reveal-poster.jpg" tabindex="-1">
+        <source src="assets/video/logo-reveal.mp4" type="video/mp4">
+      </video>
+    </div>
     <div class="wrap">
       <span>© 2026 PENTASTACK</span>
       <span>BYGGET FOR REFRESH IT</span>
@@ -856,6 +881,26 @@
     clone.querySelectorAll('img').forEach(function(img){ img.alt = ''; });
     row.appendChild(clone);
   });
+
+  // Logo-reveal i footeren: last inn når den nærmer seg, spill av én gang når den er godt synlig.
+  (function(){
+    var video = document.getElementById('logoReveal');
+    if(!video || !('IntersectionObserver' in window)) return;
+    if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return; // posteren viser ferdig logo
+    video.poster = 'assets/video/logo-reveal-start.jpg'; // første bilde, så det ikke hopper når filmen starter
+    var preload = new IntersectionObserver(function(entries){
+      if(entries[0].isIntersecting){ video.preload = 'auto'; video.load(); preload.disconnect(); }
+    }, { rootMargin: '600px 0px' });
+    var trigger = new IntersectionObserver(function(entries){
+      if(entries[0].isIntersecting){
+        trigger.disconnect();
+        var p = video.play();
+        if(p && p.catch) p.catch(function(){});
+      }
+    }, { threshold: .6 });
+    preload.observe(video);
+    trigger.observe(video);
+  })();
 
   // scroll reveal
   var io = new IntersectionObserver(function(entries){
