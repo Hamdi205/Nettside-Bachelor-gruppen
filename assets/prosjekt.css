@@ -79,24 +79,6 @@
   .section-intro { color: var(--muted); max-width: 640px; margin-bottom: 48px; }
   .mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
 
-  /* Navigation */
-  .nav {
-    position: fixed; inset: 0 0 auto 0; z-index: 50;
-    background: color-mix(in srgb, var(--bg) 85%, transparent);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid var(--line);
-  }
-  .nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; gap: 16px; }
-  .logo {
-    font-weight: 800; text-decoration: none; display: grid; place-items: center;
-    width: 38px; height: 38px; border-radius: 10px; background: var(--dark); color: var(--dark-text);
-  }
-  .nav ul { list-style: none; display: flex; gap: 4px; margin: 0; padding: 0; overflow-x: auto; }
-  .nav a.link {
-    text-decoration: none; padding: 8px 12px; border-radius: 8px; color: var(--muted);
-    font-size: .92rem; white-space: nowrap;
-  }
-  .nav a.link:hover, .nav a.link.active { color: var(--text); background: var(--surface-2); }
   .theme-btn {
     border: 1px solid var(--line); background: var(--surface); color: var(--text);
     border-radius: 10px; padding: 8px 10px; cursor: pointer; font-size: 1rem; flex-shrink: 0;
@@ -668,17 +650,10 @@
   :root, :root[data-theme="dark"], :root[data-theme="light"] {
     --bg: #ECEEF0; --surface: #FFFFFF; --surface-2: #E1E4E8; --text: #14171C; --muted: #5B6270;
     --line: #C9CCD2; --accent: #3E8E85; --accent-ink: #FFFFFF; --dark: #14171C; --dark-text: #F2F3F1;
-    --ok: #2E8A7F; --bad: #C2453F; --warn: #B7791F; --shadow: 0 10px 30px rgba(20,23,28,.08);
+    --ok: #2E8A7F; --fg: #14171C; --font-mono: "IBM Plex Mono", monospace; --bad: #C2453F; --warn: #B7791F; --shadow: 0 10px 30px rgba(20,23,28,.08);
   }
   body { background: #ECEEF0; color: #14171C; }
   .page-top > section { border-top: 1px solid #C9CCD2; }
-  .nav { position: sticky; top: 0; z-index: 10; background: rgba(236,238,240,.94); backdrop-filter: blur(8px); border-bottom: 1px solid #C9CCD2; }
-  .nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; gap: 16px; }
-  .nav-brand img { width: 150px; height: auto; display: block; }
-  .nav ul { display: flex; gap: 6px; list-style: none; margin: 0; padding: 0; overflow-x: auto; }
-  .nav a.link { text-decoration: none; color: #5B6270; padding: 7px 12px; border-radius: 8px; font-size: .92rem; white-space: nowrap; }
-  .nav a.link:hover, .nav a.link.active { color: #14171C; background: #E1E4E8; }
-  .nav .theme-btn { display: none; }
   footer { padding: 32px 0 48px; border-top: 1px solid #C9CCD2; color: #5B6270; font-size: .85rem; text-align: center; }
 
   /* Hindringsdemo: tydelig neste steg */
@@ -696,3 +671,14 @@
 
   /* Luft mellom video og kortene under */
   .proj .layer-list { margin: 24px 0 0; padding: 0; }
+
+  /* ---- Meny: samme som forsiden ---- */
+  .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 50; background: var(--bg); border-bottom: 1px solid var(--line); }
+  .nav .wrap { display: flex; align-items: center; justify-content: space-between; padding-top: 18px; padding-bottom: 18px; }
+  .nav-brand img { width: 150px; height: auto; display: block; }
+  .nav-links { display: flex; gap: 34px; font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; }
+  .nav-links a { color: var(--muted); transition: color .2s ease; position: relative; text-decoration: none; }
+  .nav-links a:hover, .nav-links a.active { color: var(--fg); }
+  @media (max-width: 860px) { .nav-links { gap: 16px; overflow-x: auto; } }
+  @media (max-width: 520px) { .nav-links { display: none; } }
+  .page-top { padding-top: 96px; }
