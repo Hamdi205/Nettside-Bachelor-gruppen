@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="no">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prosjekt · Pentastack</title>
+<meta name="description" content="Pentastack sin bacheloroppgave for Refresh IT 2026: backend, sikkerhet og fullstack.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #14171C; --ink-soft: #1D2128; --line: #2B3038; --text: #F2F3F1; --muted: #8A909B;
+    --accent: #3E8E85; --accent-soft: #5FB3A9; --surface: #191D24;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--ink); color: var(--text); font: 16px/1.6 "DM Sans", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: inherit; }
+  img { display: block; max-width: 100%; }
+  .wrap { width: min(1080px, 100% - 32px); margin-inline: auto; }
+  section { padding: 72px 0; border-top: 1px solid var(--line); }
+  .eyebrow { font: 500 12px "JetBrains Mono", monospace; letter-spacing: .14em; text-transform: uppercase; color: var(--accent-soft); margin-bottom: 12px; }
+  h1, h2, h3 { margin: 0; line-height: 1.15; letter-spacing: -.01em; }
+  h1 { font-size: clamp(2.2rem, 5vw, 3.6rem); font-weight: 700; }
+  h2 { font-size: clamp(1.6rem, 3.5vw, 2.2rem); font-weight: 700; margin-bottom: 12px; }
+  h3 { font-size: 1.15rem; font-weight: 600; }
+  .lead { color: var(--muted); max-width: 680px; font-size: 1.05rem; }
+
+  /* Navigasjon */
+  .nav { position: sticky; top: 0; z-index: 10; background: rgba(20,23,28,.92); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+  .nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 60px; gap: 16px; }
+  .brand { font: 600 15px "JetBrains Mono", monospace; text-decoration: none; letter-spacing: .04em; }
+  .nav ul { display: flex; gap: 6px; list-style: none; margin: 0; padding: 0; overflow-x: auto; }
+  .nav a.link { text-decoration: none; color: var(--muted); padding: 7px 12px; border-radius: 8px; font-size: .92rem; white-space: nowrap; }
+  .nav a.link:hover, .nav a.link.active { color: var(--text); background: var(--ink-soft); }
+
+  /* Hero */
+  .hero { padding: 64px 0 56px; }
+  .hero .meta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+  .pill { display: inline-block; padding: 6px 13px; border-radius: 999px; border: 1px solid var(--line); background: var(--ink-soft); font-size: .86rem; font-weight: 500; color: var(--text); }
+  .pill.accent { border-color: var(--accent); color: var(--accent-soft); }
+  .btns { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+  .btn { display: inline-flex; align-items: center; padding: 12px 20px; border-radius: 10px; font-weight: 600; text-decoration: none; border: 1px solid var(--line); background: var(--surface); }
+  .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+  /* Video */
+  .video { border-radius: 16px; overflow: hidden; border: 1px solid var(--line); background: #000; }
+  .video video { width: 100%; display: block; }
+
+  /* Kort */
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px; margin-top: 28px; }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 22px; }
+  .card p { color: var(--muted); margin: 8px 0 0; font-size: .95rem; }
+  .placeholder { color: #E8B86D; border: 1px dashed #E8B86D; border-radius: 10px; padding: 12px 14px; font-size: .92rem; }
+
+  /* Team */
+  .team { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-top: 28px; }
+  .member { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+  .member img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; object-position: 50% 25%; background: var(--ink-soft); }
+  .member .info { padding: 16px; }
+  .member small { color: var(--muted); font-family: "JetBrains Mono", monospace; font-size: .75rem; }
+  .member .links { display: flex; gap: 12px; margin-top: 12px; font-size: .85rem; }
+  .member .links a { color: var(--accent-soft); text-decoration: none; }
+  .member .links a:hover { text-decoration: underline; }
+
+  footer { padding: 32px 0 48px; border-top: 1px solid var(--line); color: var(--muted); font-size: .85rem; }
+  @media (max-width: 640px) { section { padding: 52px 0; } .nav ul { display: none; } }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap">
+    <a href="index.html" class="brand">PENTASTACK</a>
+    <ul>
+      <li><a class="link" href="index.html#om">Om oss</a></li>
+      <li><a class="link" href="index.html#team">Team</a></li>
+      <li><a class="link active" href="prosjekt.html">Prosjekt</a></li>
+      <li><a class="link" href="index.html#kontakt">Kontakt</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="eyebrow">Bacheloroppgave · Refresh IT 2026</p>
+    <h1>Vi bygger en reell løsning for en oppdragsgiver</h1>
+    <p class="lead">Pentastack er fem IT-studenter som jobber sammen om bacheloroppgaven. Vi har valgt et prosjekt der vi kan bruke backend, sikkerhet og fullstack på en reell problemstilling, og lære mest mulig av det.</p>
+    <div class="meta">
+      <span class="pill accent">Backend</span>
+      <span class="pill accent">Sikkerhet</span>
+      <span class="pill accent">Fullstack</span>
+      <span class="pill">Skyløsninger</span>
+      <span class="pill">Systemarkitektur</span>
+      <span class="pill">AI i praksis</span>
+    </div>
+    <div class="btns">
+      <a class="btn primary" href="#film">Se filmen</a>
+      <a class="btn" href="#team">Møt teamet</a>
+    </div>
+  </div>
+</header>
+
+<section id="film">
+  <div class="wrap">
+    <p class="eyebrow">Film</p>
+    <h2>Prosjektet i 4 minutter</h2>
+    <p class="lead">Filmen vi laget om prosjektet, til Refresh IT.</p>
+    <div class="video" style="margin-top:24px">
+      <video controls playsinline preload="metadata" poster="assets/video/refreshit-poster.jpg">
+        <source src="assets/video/pentastack.mp4" type="video/mp4">
+        Nettleseren din støtter ikke video.
+      </video>
+    </div>
+  </div>
+</section>
+
+<section id="om">
+  <div class="wrap">
+    <p class="eyebrow">Problemstilling</p>
+    <h2>Hva prosjektet løser</h2>
+    <div class="placeholder" style="margin-top:20px">[Skriv inn problemstillingen og hvem oppdragsgiveren er]</div>
+    <div class="grid">
+      <div class="card"><h3>Backend</h3><p>Robuste API-er og systemer som skal tåle belastning og vokse over tid.</p></div>
+      <div class="card"><h3>Sikkerhet</h3><p>Sikker arkitektur fra start, med trusselmodellering og testing.</p></div>
+      <div class="card"><h3>Fullstack</h3><p>Fra database og backend til et grensesnitt som fungerer i praksis.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="team">
+  <div class="wrap">
+    <p class="eyebrow">Team</p>
+    <h2>Pentastack</h2>
+    <p class="lead">Fem utviklere, og en stack som dekker hele veien fra infrastruktur til brukergrensesnitt.</p>
+    <div class="team">
+      <div class="member"><img src="assets/Portretter/HamdiPortrett.PNG" alt="Hamdi Dagane"><div class="info"><h3>Hamdi Dagane</h3><small>Fullstack · Backend</small><div class="links"><a href="mailto:hamdi2005dagane@hotmail.com">Mail</a><a href="https://www.linkedin.com/in/hamdi-a-dagane-592a52226/">LinkedIn</a><a href="https://github.com/Hamdi205">GitHub</a></div></div></div>
+      <div class="member"><img src="assets/Portretter/LauriePorttrett.PNG" alt="Laurie Shima Niyongabo"><div class="info"><h3>Laurie Shima Niyongabo</h3><small>Team</small><div class="links"><a href="mailto:laurie.niyongabo@gmail.com">Mail</a><a href="https://www.linkedin.com/in/laurie-shima-niyongabo-3408b9352/">LinkedIn</a><a href="https://github.com/laurieniyongabo">GitHub</a></div></div></div>
+      <div class="member"><img src="assets/Portretter/EliasPortrett.PNG" alt="Elias Nahiry"><div class="info"><h3>Elias Nahiry</h3><small>Team</small><div class="links"><a href="mailto:esnahiry@uia.no">Mail</a><a href="https://www.linkedin.com/in/elias-nahiry-025734388/">LinkedIn</a><a href="https://github.com/eliasnahiry">GitHub</a></div></div></div>
+      <div class="member"><img src="assets/Portretter/ErzaPortrett.PNG" alt="Erza Malici"><div class="info"><h3>Erza Malici</h3><small>Team</small><div class="links"><a href="mailto:erzam@uia.no">Mail</a><a href="https://www.linkedin.com/in/erza-malici/">LinkedIn</a><a href="https://github.com/erzamalici">GitHub</a></div></div></div>
+      <div class="member"><img src="assets/Portretter/JabirPortrett.jpg" alt="Jabir Mahamoud Gutale"><div class="info"><h3>Jabir Mahamoud Gutale</h3><small>Team</small><div class="links"><a href="mailto:Jabirmg1911@gmail.com">Mail</a><a href="https://www.linkedin.com/in/jabir-mahamoud-gutale/">LinkedIn</a><a href="https://github.com/JabirMAG">GitHub</a></div></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="teknologi">
+  <div class="wrap">
+    <p class="eyebrow">Teknologi</p>
+    <h2>Det vi bygger med</h2>
+    <div class="placeholder" style="margin-top:20px">[Legg inn teknologiene som brukes i bacheloroppgaven, for eksempel språk, rammeverk, database og sky]</div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">© 2026 Pentastack · Bygget for Refresh IT</div>
+</footer>
+
+</body>
+</html>
