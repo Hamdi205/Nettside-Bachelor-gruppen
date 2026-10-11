@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Prosjekt · Pentastack</title>
+<title>Utvalgte prosjekter · Pentastack</title>
 <meta name="description" content="Pentastack sine prosjekter: Kartverket, Nødhavn og TutorLink, med demoer og lenker til GitHub.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,7 +14,7 @@
 
 <nav class="nav">
   <div class="wrap">
-    <a href="index.html" class="brand">PENTASTACK</a>
+    <a href="index.html" class="nav-brand" aria-label="Pentastack, til forsiden"><img src="assets/pentastack-logo.svg" alt="Pentastack"></a>
     <ul>
       <li><a class="link" href="index.html#om">Om oss</a></li>
       <li><a class="link" href="index.html#team">Team</a></li>
@@ -28,8 +28,8 @@
 <section id="prosjekter">
   <div class="wrap">
     <p class="eyebrow reveal">Prosjekter</p>
-    <h2 class="section-title reveal">Det jeg har bygget</h2>
-    <p class="section-intro reveal">Tre prosjekter, med bilder, forklaringer og demoer du kan prøve selv.</p>
+    <h2 class="section-title reveal">Utvalgte prosjekter vi har bygget</h2>
+    <p class="section-intro reveal">Tre prosjekter vi har jobbet med, med forklaringer, video og demoer du kan prøve selv.</p>
     
 <article class="proj reveal" id="kartverket">
   <div class="wrap-inner">
@@ -61,6 +61,7 @@
             <button class="kv-btn mint" id="kvLine" aria-pressed="false">Linje</button>
             <button class="kv-btn mint" id="kvHere">Nåværende posisjon</button>
             <button class="kv-btn finish" id="kvFinish" hidden>Fullfør linje</button>
+            <button class="kv-btn" id="kvUndo" hidden>Angre siste punkt</button>
           </div>
           <div class="kv-map">
             <svg id="kvMap" viewBox="0 0 640 440" role="img" aria-label="Illustrasjonskart. Klikk for å tegne et punkt eller en linje."></svg>
@@ -553,6 +554,8 @@
   };
 
   function setStep(n) {
+    $('#kvPoint').classList.toggle('kv-pulse', n === 1);
+    $('#kvLine').classList.toggle('kv-pulse', n === 1);
     document.querySelectorAll('.kv-steps li').forEach(li => {
       const s = Number(li.dataset.step);
       li.classList.toggle('done', s < n);
@@ -633,8 +636,9 @@
     $('#kvPoint').setAttribute('aria-pressed', String(mode === 'point'));
     $('#kvLine').setAttribute('aria-pressed', String(mode === 'line'));
     setStep(2);
-    setHint(mode === 'point' ? 'Klikk i kartet for å plassere punktet.' : 'Klikk i kartet for å legge til punkter på linjen. Trykk «Fullfør linje» når du er ferdig.');
+    setHint(mode === 'point' ? 'Klikk i kartet for å plassere punktet.' : 'Klikk i kartet for å legge til punkter på linjen. Når du er ferdig, trykk «Fullfør linje».');
     $('#kvFinish').hidden = mode !== 'line';
+    $('#kvUndo').hidden = mode !== 'line';
     $('#kvFinish').disabled = true;
     drawMap();
   }
@@ -644,6 +648,7 @@
     $('#kvPoint').setAttribute('aria-pressed', 'false');
     $('#kvLine').setAttribute('aria-pressed', 'false');
     $('#kvFinish').hidden = true;
+    $('#kvUndo').hidden = true;
   }
 
   $('#kvPoint').addEventListener('click', () => startDraft('Point'));
@@ -711,6 +716,14 @@
 
   $('#kvForm').addEventListener('submit', (ev) => { ev.preventDefault(); save(1, false); });
   $('#kvQuick').addEventListener('click', () => save(1, true));
+  $('#kvUndo').addEventListener('click', () => {
+    if (!draft || draft.type !== 'LineString') return;
+    draft.pts.pop();
+    if (!draft.pts.length) { draft = null; startDraft('LineString'); return; }
+    $('#kvFinish').disabled = draft.pts.length < 2;
+    setHint(draft.pts.length < 2 ? 'Klikk i kartet for å legge til minst to punkter på linjen.' : 'Fullfør linjen, eller legg til flere punkter.');
+    drawMap();
+  });
 
   $('#kvReset').addEventListener('click', () => {
     saved = seedData();
