@@ -693,3 +693,6 @@
   .kv-steps li.current span { background: #3E8E85; color: #FFFFFF; }
   .kv-hint { font-size: 1rem; border-left-color: #3E8E85; }
   @media (max-width: 520px) { .kv-steps li { font-size: .85rem; } .kv-btn { min-width: 0; padding: 12px 14px; } }
+
+  /* Luft mellom video og kortene under */
+  .proj .layer-list { margin: 24px 0 0; padding: 0; }
