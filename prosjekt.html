@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Utvalgte prosjekter · Pentastack</title>
-<meta name="description" content="Pentastack sine prosjekter: Kartverket, Nødhavn og TutorLink, med demoer og lenker til GitHub.">
+<meta name="description" content="Pentastack sine prosjekter: Kartverket, Nødhavn og TutorLink, med demoer, lenker til GitHub og resultater fra andre tekniske fag.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="icon" href="assets/Logo-Favi.png" type="image/png">
 <link rel="stylesheet" href="assets/prosjekt.css">
 </head>
 <body>
@@ -28,28 +28,61 @@
 </nav>
 
 <main class="page-top">
+
+<header class="pj-hero">
+  <div class="wrap">
+    <p class="eyebrow">Prosjekter</p>
+    <h1>Utvalgte prosjekter vi har bygget</h1>
+    <p class="pj-lede">Tre prosjekter med demoer du kan prøve selv, og fag der vi har levert til toppkarakter.</p>
+    <nav class="pj-index" aria-label="Hopp til prosjekt">
+      <a href="#kartverket"><span>01</span><b>Obstacle-rapportering</b><small>Kartverket · interaktiv demo</small></a>
+      <a href="#nodhavn"><span>02</span><b>Nødhavn i Norge</b><small>GIS og romlige spørringer · video</small></a>
+      <a href="#tutorlink"><span>03</span><b>TutorLink</b><small>Algoritmer og datastrukturer · demo</small></a>
+      <a href="#fag"><span>04</span><b>Andre tekniske fag</b><small>Resultater og karakterer</small></a>
+    </nav>
+  </div>
+</header>
+
 <section id="prosjekter">
   <div class="wrap">
-    <p class="eyebrow reveal">Prosjekter</p>
-    <h2 class="section-title reveal">Utvalgte prosjekter vi har bygget</h2>
-    <p class="section-intro reveal">Tre prosjekter vi har jobbet med, med forklaringer, video og demoer du kan prøve selv.</p>
-    
+
 <article class="proj reveal" id="kartverket">
-  <div class="wrap-inner">
-    <span class="meta">Semesterprosjekt · Kartverket</span>
-    <h2>Obstacle-rapportering for luftrommet</h2>
-    <p>Et webbasert system for å rapportere og validere hindringer i luftrommet, slik at flysikkerheten blir bedre. Piloter melder inn hindringer på kartet. Registerførere behandler dem, og administratorer styrer brukere og arkiv.</p>
-    <p>Hver hindring får en status: under behandling, godkjent eller avslått. Avslåtte hindringer flyttes til arkivet, og admin kan gjenopprette dem.</p>
-    <p>Jeg bidro mest på backend, og var Scrum master for gruppa.</p>
+  <div class="pj-cover">
+    <div class="pj-cover-text">
+      <span class="pj-num">01 / 03</span>
+      <span class="meta">Semesterprosjekt · Kartverket og Norsk Luftambulanse</span>
+      <h2>Obstacle-rapportering for luftrommet</h2>
+      <p>Piloter melder inn hindringer som kraner og kraftledninger, slik at flysikkerheten blir bedre.</p>
+      <span class="pj-award">Delt 1. plass av 23 grupper · EXPO 2025</span>
+    </div>
+    <figure class="pj-cover-img"><img src="assets/prosjekt/helikopter.jpg" alt="Luftambulansehelikopter sett nedenfra mot blå himmel" loading="lazy"></figure>
+  </div>
+  <div class="pj-body">
+    <div class="pj-cols">
+      <div>
+        <p>Et webbasert system for å rapportere og validere hindringer i luftrommet. Piloter melder inn hindringer på kartet. Registerførere behandler dem, og administratorer styrer brukere og arkiv.</p>
+        <p>Hver hindring får en status: under behandling, godkjent eller avslått. Avslåtte hindringer flyttes til arkivet, og admin kan gjenopprette dem.</p>
+      </div>
+      <ul class="pj-roles" aria-label="Roller i systemet">
+        <li><b>Pilot</b>Melder inn hindringer på kartet</li>
+        <li><b>Registerfører</b>Godkjenner eller avslår rapportene</li>
+        <li><b>Administrator</b>Styrer brukere og arkiv</li>
+      </ul>
+    </div>
     <div class="pills"><span class="pill-tech">C#</span><span class="pill-tech">ASP.NET Core MVC</span><span class="pill-tech">.NET 9</span><span class="pill-tech">Entity Framework Core</span><span class="pill-tech">MariaDB</span><span class="pill-tech">Docker</span><span class="pill-tech">Razor</span><span class="pill-tech">Bootstrap 5</span><span class="pill-tech">Leaflet</span><span class="pill-tech">JavaScript</span><span class="pill-tech">MSTest</span><span class="pill-tech">GitHub Actions</span></div>
     <div class="proj-links">
-      <a class="btn sm" href="https://github.com/JabirMAG/kartverket-obstacle" target="_blank" rel="noopener">GitHub →</a>
-      <a class="btn sm primary" href="#kartverket-demo">Prøv hindringsrapportering ↓</a>
+      <a class="btn sm primary" href="#kartverket-demo">Prøv demoen ↓</a>
+      <a class="btn sm" href="https://github.com/JabirMAG/kartverket-obstacle" target="_blank" rel="noopener">GitHub ↗</a>
     </div>
-  
+
     <div class="demo-wrap" id="kartverket-demo">
-<h3 class="demo-title reveal" style="margin-top:56px">Slik rapporterer du en hindring</h3>
-    <p class="demo-lead reveal">Prøv selv som pilot: velg punkt eller linje, tegn på kartet, og fyll ut skjemaet. Kartet er en forenklet illustrasjon, og rapportene du sender inn lagres ikke noe sted.</p>
+      <h3 class="demo-title">Prøv selv: rapporter en hindring</h3>
+      <div class="pj-brief">
+        <div><span>Din rolle</span><b>Pilot</b><p>Du har sett en hindring fra lufta og vil melde den inn.</p></div>
+        <div><span>Slik gjør du</span><b>Tegn og send inn</b><p>Velg <em>Punkt</em> eller <em>Linje</em>, klikk i kartet og fyll ut skjemaet.</p></div>
+        <div><span>Hva skjer etterpå</span><b>Bytt rolle</b><p>Godkjenn eller avslå rapporten som registerfører, og se hvordan statusen endres.</p></div>
+      </div>
+      <p class="pj-note">Kartet er en forenklet illustrasjon av Agder-kysten. Ingenting du sender inn lagres.</p>
     <div class="kv reveal" id="kv">
       <ol class="kv-steps" aria-label="Fremdrift">
         <li data-step="1"><span>1</span>Velg verktøy</li>
@@ -73,8 +106,9 @@
             <span><i style="background:#ff9800"></i>Under behandling</span>
             <span><i style="background:#4caf50"></i>Godkjent</span>
             <span><i style="background:#ff6b00"></i>Din tegning</span>
+            <span><i style="background:#dc3545"></i>Avslått (arkivert)</span>
           </div>
-          <p class="kv-hint" id="kvHint">Velg Punkt eller Linje for å starte.</p>
+          <p class="kv-hint" id="kvHint"><b>Neste steg</b><span id="kvHintText">Velg Punkt eller Linje for å starte.</span></p>
         </div>
 
         <div class="kv-side">
@@ -105,7 +139,7 @@
           </div>
 
           <div class="kv-card">
-            <div class="kv-card-head"><b>Mine rapporter</b><small>Statusen oppdateres når en registerfører har behandlet rapporten.</small></div>
+            <div class="kv-card-head"><b>Mine rapporter</b><small>Når du har sendt inn, kan du bytte rolle og behandle rapporten som registerfører.</small></div>
             <ul class="kv-list" id="kvList"></ul>
           </div>
 
@@ -115,17 +149,24 @@
       </div>
     </div>
     </div>
-</div>
+  </div>
 </article>
 
-    
-<article class="proj reveal" id="nodhavn">
-  <span class="meta">Gruppeprosjekt · IS218</span>
-  <h2>Nødhavn i Norge</h2>
-  <p>Et webkart for beredskapsaktører som viser nødhavner langs kysten. Brukeren kan velge et punkt på kartet eller bruke egen posisjon, og få treff innenfor en valgt radius.</p>
-  <p>Søket gjøres med romlige spørringer i PostGIS, via Supabase. Vi jobbet også med romlig analyse i GeoPandas, og vi lærte mye om å bruke AI i utviklingen.</p>
-  <div class="demo-wrap">
-    <div class="video-frame">
+<article class="proj reveal flip" id="nodhavn">
+  <div class="pj-cover">
+    <div class="pj-cover-text">
+      <span class="pj-num">02 / 03</span>
+      <span class="meta">Gruppeprosjekt · IS218</span>
+      <h2>Nødhavn i Norge</h2>
+      <p>Et webkart som hjelper beredskapsaktører å finne nærmeste nødhavn langs kysten.</p>
+    </div>
+    <figure class="pj-cover-img"><img src="assets/prosjekt/nodhavn-bat.jpg" alt="Luftputebåt i fart på havet i skumringen" loading="lazy"></figure>
+  </div>
+  <div class="pj-body">
+    <p>Brukeren kan velge et punkt på kartet eller bruke egen posisjon, og få treff innenfor en valgt radius. Søket gjøres med romlige spørringer i PostGIS, via Supabase. Vi jobbet også med romlig analyse i GeoPandas, og vi lærte mye om å bruke AI i utviklingen.</p>
+    <div class="demo-wrap">
+      <h3 class="demo-title">Se løsningen i bruk</h3>
+      <div class="video-frame">
         <video controls playsinline preload="metadata" poster="assets/nodhavn-poster.jpg">
           <source src="assets/nodhavn-demo.mp4" type="video/mp4">
           Nettleseren din støtter ikke video.
@@ -137,23 +178,33 @@
         <li><b>Farleder og kommunegrenser</b>Egne kartlag som kan slås av og på</li>
         <li><b>Søk rundt punkt</b>Klikk i kartet, velg radius, og se treffene</li>
       </ul>
-  </div>
-  <div class="pills"><span class="pill-tech">JavaScript</span><span class="pill-tech">Leaflet</span><span class="pill-tech">Supabase</span><span class="pill-tech">PostgreSQL / PostGIS</span><span class="pill-tech">Node.js</span><span class="pill-tech">Express</span><span class="pill-tech">GeoJSON</span><span class="pill-tech">GeoPandas</span><span class="pill-tech">Jupyter</span><span class="pill-tech">HTML5 / CSS3</span><span class="pill-tech">OpenStreetMap</span><span class="pill-tech">AI-assistert utvikling</span></div>
-  <div class="proj-links">
-    <a class="btn sm" href="https://github.com/FanuelHab/Geografiske-informasjonssystem-og-AI-prosjekt" target="_blank" rel="noopener">GitHub →</a>
+    </div>
+    <div class="pills"><span class="pill-tech">JavaScript</span><span class="pill-tech">Leaflet</span><span class="pill-tech">Supabase</span><span class="pill-tech">PostgreSQL / PostGIS</span><span class="pill-tech">Node.js</span><span class="pill-tech">Express</span><span class="pill-tech">GeoJSON</span><span class="pill-tech">GeoPandas</span><span class="pill-tech">Jupyter</span><span class="pill-tech">HTML5 / CSS3</span><span class="pill-tech">OpenStreetMap</span><span class="pill-tech">AI-assistert utvikling</span></div>
+    <div class="proj-links">
+      <a class="btn sm" href="https://github.com/FanuelHab/Geografiske-informasjonssystem-og-AI-prosjekt" target="_blank" rel="noopener">GitHub ↗</a>
+    </div>
   </div>
 </article>
 
-    
 <article class="proj reveal" id="tutorlink">
-  <span class="meta">Algoritmer og datastrukturer · Gruppe 11</span>
-  <h2>TutorLink</h2>
-  <p>TutorLink er et system for å booke veiledere. Du søker i et emne, sorterer tutorene, booker en ledig tid, eller står på venteliste. Vi lærte at valg av datastruktur betyr mye: en lenket liste gir rask kø til ventelisten, og et binært søketre gir rask oppslag, så lenge det er balansert. Vi var et tett team på tre, og alle gjorde en stor del av arbeidet.</p>
-  
-  <div class="wrap">
-    <h3 class="demo-title reveal">Datastrukturer fra TutorLink</h3>
-    <p class="demo-lead reveal">En forenklet JavaScript-versjon av ventelisten og søketreet i prosjektet. Kjører i nettleseren din.</p>
-
+  <div class="pj-cover">
+    <div class="pj-cover-text">
+      <span class="pj-num">03 / 03</span>
+      <span class="meta">Algoritmer og datastrukturer · Gruppe 11</span>
+      <h2>TutorLink</h2>
+      <p>Et system for å booke veiledere, der valg av datastruktur avgjør hvor raskt det går.</p>
+    </div>
+    <figure class="pj-cover-img"><img src="assets/prosjekt/data-algoritmer.jpg" alt="Person som ser på en skjerm med fallende kode" loading="lazy"></figure>
+  </div>
+  <div class="pj-body">
+    <p>Du søker i et emne, sorterer tutorene, booker en ledig tid, eller står på venteliste. Vi lærte at valg av datastruktur betyr mye: en lenket liste gir rask kø til ventelisten, og et binært søketre gir raske oppslag, så lenge det er balansert. Vi var et tett team på tre, og alle gjorde en stor del av arbeidet.</p>
+    <div class="demo-wrap">
+      <h3 class="demo-title">Prøv selv: datastrukturene fra TutorLink</h3>
+      <ol class="pj-try">
+        <li>Legg til noen navn i <b>Ventelisten</b>, og trykk <b>Ta neste</b>. Den første inn er den første ut.</li>
+        <li>Bytt til <b>Binært søketre</b> og trykk <b>Sett inn sortert</b>. Treet blir en lang kjede.</li>
+        <li>Skriv et navn og trykk <b>Søk</b>. Stien som søket følger blir markert.</li>
+      </ol>
     <div class="demo-shell reveal">
       <div class="demo-head">
         <div class="seg" role="tablist" aria-label="Velg datastruktur">
@@ -211,13 +262,80 @@
         </table>
       </div>
     </div>
-  </div>
-
-  <div class="pills"><span class="pill-tech">Python</span><span class="pill-tech">Lenket liste</span><span class="pill-tech">Binært søketre</span><span class="pill-tech">Kompleksitetsanalyse (Big-O)</span><span class="pill-tech">Køer</span><span class="pill-tech">Git / GitHub</span><span class="pill-tech">JavaScript (demo)</span></div>
-  <div class="proj-links">
-    <a class="btn sm" href="https://github.com/erzamalici/algoritms-and-data-structures-gruppe-11" target="_blank" rel="noopener">GitHub →</a>
+    </div>
+    <div class="pills"><span class="pill-tech">Python</span><span class="pill-tech">Lenket liste</span><span class="pill-tech">Binært søketre</span><span class="pill-tech">Kompleksitetsanalyse (Big-O)</span><span class="pill-tech">Køer</span><span class="pill-tech">Git / GitHub</span><span class="pill-tech">JavaScript (demo)</span></div>
+    <div class="proj-links">
+      <a class="btn sm" href="https://github.com/erzamalici/algoritms-and-data-structures-gruppe-11" target="_blank" rel="noopener">GitHub ↗</a>
+    </div>
   </div>
 </article>
+  </div>
+</section>
+
+<section id="fag" class="fag">
+  <div class="wrap">
+    <p class="eyebrow">Andre tekniske fag</p>
+    <h2 class="section-title">Resultater vi er stolte av</h2>
+    <p class="section-intro">Fag der vi har bygget og levert noe konkret, og fått toppkarakter for det.</p>
+
+    <article class="fag-card reveal" id="database">
+      <figure class="fag-img">
+        <img src="assets/prosjekt/database-tavle.jpg" alt="Hånd som tegner en databasemodell på en tavle" loading="lazy">
+        <span class="grade-seal" aria-label="Karakter A"><small>Karakter</small>A</span>
+      </figure>
+      <div class="fag-body">
+        <span class="meta">IS-309 · Videregående databasesystemer</span>
+        <h3>Databasen til et sykkeldelingssystem</h3>
+        <p>Vi designet og bygget databasen til Bcycle, et sykkeldelingssystem, i PostgreSQL. Vi startet med ER-modell og normalisering, og endte med lagrede prosedyrer, triggere, indekser og rollebasert tilgang. Mappen ble levert som portefølje med SQL-skript og full databaseeksport.</p>
+        <dl class="fag-stats">
+          <div><dt>12</dt><dd>tabeller i 3NF</dd></div>
+          <div><dt>6 + 1</dt><dd>prosedyrer og funksjon</dd></div>
+          <div><dt>2</dt><dd>triggere</dd></div>
+          <div><dt>5</dt><dd>roller med minst mulig tilgang</dd></div>
+        </dl>
+      </div>
+
+      <div class="fag-extra">
+        <div class="perf" id="perf">
+          <span class="perf-label">EXPLAIN ANALYZE · samme spørring, før og etter indeks</span>
+          <code class="perf-sql">SELECT * FROM trip WHERE rider_id = 1 ORDER BY start_time DESC;</code>
+          <div class="perf-row">
+            <span>Uten indeks <small>Seq Scan + sortering</small></span>
+            <div class="perf-bar"><i class="slow" style="--w:100%"></i></div>
+            <b>258,7 ms</b>
+          </div>
+          <div class="perf-row">
+            <span>Med indeks <small>idx_trip_rider_time</small></span>
+            <div class="perf-bar"><i class="fast" style="--w:23.2%"></i></div>
+            <b>59,9 ms</b>
+          </div>
+          <p class="perf-result"><strong>4,3× raskere</strong> på over 200 000 turer</p>
+        </div>
+
+        <div class="folder" aria-label="Innleveringsmappen">
+          <div class="folder-tab">Innleveringsmappe · IS-309</div>
+          <ul class="folder-files">
+            <li><span class="ft pdf">PDF</span><b>Portfolio.pdf</b><small>Rapport, 19 sider</small></li>
+            <li><span class="ft sql">SQL</span><b>Bikeshare_SQL.sql</b><small>Tabeller, prosedyrer, triggere og roller</small></li>
+            <li><span class="ft tar">TAR</span><b>FullBikeShare.tar</b><small>Full eksport av databasen (pg_dump)</small></li>
+          </ul>
+          <div class="stamp" aria-hidden="true"><span>Karakter</span>A</div>
+        </div>
+      </div>
+      <div class="pills fag-pills"><span class="pill-tech">PostgreSQL</span><span class="pill-tech">ER-modellering</span><span class="pill-tech">3NF</span><span class="pill-tech">PL/pgSQL</span><span class="pill-tech">Triggere</span><span class="pill-tech">Indekser</span><span class="pill-tech">EXPLAIN ANALYZE</span><span class="pill-tech">Rollebasert tilgang</span></div>
+    </article>
+
+    <article class="fag-card fag-small reveal" id="sikkerhet">
+      <figure class="fag-img">
+        <img src="assets/prosjekt/sikkerhet.jpg" alt="Nærbilde av ordet Security på en skjerm" loading="lazy">
+        <span class="grade-seal" aria-label="Toppkarakter"><small>Resultat</small>Topp</span>
+      </figure>
+      <div class="fag-body">
+        <span class="meta">Valgfag · Information Systems Security</span>
+        <h3>Sikkerhet i informasjonssystemer</h3>
+        <p>Flere av oss valgte sikkerhetsfaget i tillegg til de obligatoriske fagene, og vi fikk toppkarakterer. Sikkerhet er et av fokusområdene våre, og faget ga oss et godt grunnlag for å bygge løsninger som er trygge fra starten.</p>
+      </div>
+    </article>
   </div>
 </section>
 
@@ -451,8 +569,8 @@
 (() => {
   // Hindringsrapportering (forenklet etter Kartverket-prosjektet: punkt/linje, skjema, statuser)
   const NS = 'http://www.w3.org/2000/svg';
-  const C = { 1: '#ff9800', 2: '#4caf50', draft: '#ff6b00' };
-  const STATUS_TEXT = { 1: 'Under behandling', 2: 'Godkjent' };
+  const C = { 1: '#ff9800', 2: '#4caf50', 3: '#dc3545', draft: '#ff6b00' };
+  const STATUS_TEXT = { 1: 'Under behandling', 2: 'Godkjent', 3: 'Avslått' };
   const SNAP = 14; // piksler, tilsvarer ca. 10 m i systemet
   const esc = (s) => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const $ = (s) => document.querySelector(s);
@@ -569,6 +687,7 @@
   function drawMap() {
     layerSaved.innerHTML = '';
     saved.forEach(o => {
+      if (o.status === 3) return; // avslåtte ligger i arkivet, ikke på kartet
       const col = C[o.status];
       if (o.type === 'Point') {
         const c = el('circle', { cx: o.pts[0][0], cy: o.pts[0][1], r: 9, fill: o.name ? col : '#9e9e9e', stroke: '#fff', 'stroke-width': 3 });
@@ -602,7 +721,10 @@
     list.innerHTML = saved.map(o => `
       <li>
         <span><b>${o.name ? esc(o.name) : 'Uten navn (hurtiglagret)'}</b></span>
-        <span class="kv-badge" style="background:${C[o.status]}">${STATUS_TEXT[o.status]}</span>
+        <span class="kv-badge" style="background:${C[o.status]}">${STATUS_TEXT[o.status]}${o.status === 3 ? ' · arkivert' : ''}</span>
+        ${o.status === 1 ? `<div class="kv-review"><small>Som registerfører:</small>
+          <button type="button" class="kv-mini ok" data-act="approve" data-id="${o.id}">Godkjenn</button>
+          <button type="button" class="kv-mini no" data-act="reject" data-id="${o.id}">Avslå</button></div>` : ''}
       </li>`).join('');
   }
 
@@ -613,7 +735,7 @@
     $('#kvLog').prepend(li);
   };
 
-  function setHint(text) { $('#kvHint').textContent = text; }
+  function setHint(text) { $('#kvHintText').textContent = text; }
 
   function showForm(show) {
     $('#kvFormCard').hidden = !show;
@@ -713,9 +835,29 @@
     $('#kvForm').reset();
     showForm(false);
     setStep(4);
-    setHint('Rapporten vises på kartet med oransje farge. En registerfører skal behandle den før den blir godkjent.');
+    setHint('Rapporten ligger på kartet i oransje. Bytt rolle: under «Mine rapporter» kan du godkjenne eller avslå den som registerfører.');
     drawMap(); renderList();
   }
+
+  // Registerfører: godkjenn eller avslå en rapport
+  $('#kvList').addEventListener('click', (ev) => {
+    const b = ev.target.closest('[data-act]');
+    if (!b) return;
+    const o = saved.find(x => x.id === Number(b.dataset.id));
+    if (!o) return;
+    const label = o.name ? esc(o.name) : 'Hurtiglagret rapport';
+    if (b.dataset.act === 'approve') {
+      o.status = 2;
+      logEvent(`Registerfører godkjente <strong>${label}</strong>. Hindringen vises nå grønn på kartet.`);
+      setHint('Godkjent! Hindringen er nå grønn på kartet. Prøv gjerne å rapportere en til.');
+    } else {
+      o.status = 3;
+      logEvent(`Registerfører avslo <strong>${label}</strong>. Den er flyttet til arkivet, og admin kan gjenopprette den.`);
+      setHint('Avslått rapporter forsvinner fra kartet og havner i arkivet. Prøv å rapportere en ny hindring.');
+    }
+    setStep(1);
+    drawMap(); renderList();
+  });
 
   $('#kvForm').addEventListener('submit', (ev) => { ev.preventDefault(); save(1, false); });
   $('#kvQuick').addEventListener('click', () => save(1, true));
