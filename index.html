@@ -5,6 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pentastack</title>
 <link rel="icon" href="assets/Logo-Favi.png" type="image/png">
+<script>
+  // Introen vises bare første gang i økten
+  (function(){
+    var seen = false;
+    try{ seen = sessionStorage.getItem('pentastackIntro') === '1'; }catch(e){}
+    document.documentElement.classList.add(seen ? 'no-intro' : 'intro-on');
+  })();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -22,10 +30,11 @@
     --text-dark:  #F2F3F1;
     --text-light: #14171C;
     --muted-dark: #8A909B;
-    --muted-light:#5B6270;
+    --muted-light:#4A5160;
 
     /* aksentfarge — turkis */
-    --accent: #3E8E85;
+    --accent: #2E7D74;
+    --accent-bright: #5FC2B5;  /* på mørke flater */
     --accent-text: #F2F3F1;
 
     /* type */
@@ -141,7 +150,9 @@
   /* ============ NAV ============ */
   .nav{
     position:fixed; top:0; left:0; right:0; z-index:50;
-    background:var(--bg);
+    background:rgb(236 238 240 / .82);
+    -webkit-backdrop-filter:saturate(1.4) blur(14px);
+            backdrop-filter:saturate(1.4) blur(14px);
     border-bottom:1px solid var(--line);
     transition:background .35s ease, border-color .35s ease;
   }
@@ -154,18 +165,27 @@
 
   /* ============ HERO ============ */
   .hero{
+    position:relative; isolation:isolate; overflow:hidden;
+    background:var(--bg); color:var(--fg);
     padding-top:150px;
-    padding-bottom:140px;
-    background-image:
-      repeating-linear-gradient(to right, var(--line) 0 1px, transparent 1px 64px),
-      repeating-linear-gradient(to bottom, var(--line) 0 1px, transparent 1px 64px);
-    background-position:center top;
-    background-size:64px 64px;
-    -webkit-mask-image:linear-gradient(to bottom, black 0%, black 55%, transparent 100%);
-            mask-image:linear-gradient(to bottom, black 0%, black 55%, transparent 100%);
+    padding-bottom:120px;
   }
-  .hero-inner{ -webkit-mask-image:none; mask-image:none; }
-  .hero .wrap{ position:relative; }
+  /* uskarpt selfie av gruppen som bakteppe */
+  .hero-bg{
+    position:absolute; inset:-60px; z-index:-2;
+    background:url("assets/group-photo.png/Selfie-blur.jpg") center 30%/cover no-repeat;
+    filter:blur(40px) saturate(1.3);
+    opacity:.75;
+  }
+  /* lys toning + rutenett, så teksten får god kontrast */
+  .hero::before{
+    content:""; position:absolute; inset:0; z-index:-1;
+    background:
+      repeating-linear-gradient(to right, rgb(20 23 28 / .06) 0 1px, transparent 1px 64px),
+      repeating-linear-gradient(to bottom, rgb(20 23 28 / .06) 0 1px, transparent 1px 64px),
+      linear-gradient(100deg, rgb(236 238 240 / .94) 0%, rgb(236 238 240 / .80) 50%, rgb(236 238 240 / .45) 100%);
+  }
+  .hero .wrap{ position:relative; max-width:1320px; }
   .hero-id{
     font-family:var(--font-mono); font-size:12px; color:var(--muted);
     display:flex; gap:24px; margin-bottom:40px; flex-wrap:wrap;
@@ -193,7 +213,7 @@
   }
 
   .hero h1{
-    font-size:clamp(40px, 4.2vw, 60px);
+    font-size:clamp(38px, 3.7vw, 56px);
     line-height:1.04;
     max-width:920px;
     margin-bottom:34px;
@@ -214,33 +234,44 @@
     letter-spacing:.05em;
     text-transform:uppercase;
     padding:10px 16px;
-    border:1.5px solid var(--fg);
+    border:1px solid rgb(20 23 28 / .25);
+    background:rgb(255 255 255 / .55);
     color:var(--fg);
   }
 
   /* ============ HERO PHOTO / OPPLASTING ============ */
-  .hero-grid{ display:grid; grid-template-columns:minmax(0,1fr) 360px; gap:32px; align-items:start; }
-  .hero-photo-wrap{ position:relative; width:100%; max-width:360px; justify-self:start; }
+  .hero-grid{ display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.08fr); gap:64px; align-items:center; }
   .hero-content{ position:relative; z-index:2; }
-  .hero-photo-wrap{ width:460px; max-width:none; transform:translateX(-64px); z-index:1; }
-  .hero-grid .hero-content{ width:calc(100% + 220px); }
-  .hero-grid .redact-line{ overflow:visible; }
+  .hero-photo-wrap{ position:relative; z-index:1; }
   .hero-photo-accent{
     position:absolute;
     inset:18px -18px -18px 18px;
     background:var(--accent);
-    transform:rotate(-2.5deg);
+    transform:rotate(-2deg);
     z-index:0;
   }
   .hero-photo{
     position:relative; z-index:1;
-    aspect-ratio:4/3;
+    aspect-ratio:3/2;
     background:var(--surface);
-    border:1px solid var(--line);
     overflow:hidden;
-    cursor:default;
+    box-shadow:0 30px 60px rgb(20 23 28 / .22);
   }
   .hero-photo img{ width:100%; height:100%; object-fit:cover; }
+  /* selfie som «polaroid» i hjørnet av gruppebildet */
+  .hero-polaroid{
+    position:absolute; z-index:2; left:-44px; bottom:-56px;
+    width:clamp(130px, 13vw, 190px); padding:8px 8px 30px;
+    background:#F7F7F5; transform:rotate(-5deg);
+    box-shadow:0 18px 40px rgb(20 23 28 / .28);
+    transition:transform .4s cubic-bezier(.2,.7,.2,1);
+  }
+  .hero-polaroid img{ aspect-ratio:1; width:100%; object-fit:cover; object-position:center 35%; }
+  .hero-polaroid figcaption{
+    position:absolute; left:0; right:0; bottom:8px; text-align:center;
+    font-family:var(--font-mono); font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:#4A5160;
+  }
+  .hero-polaroid:hover{ transform:rotate(-1deg) scale(1.04); }
 
   /* ============ ABOUT ============ */
   .section-head{ display:flex; justify-content:space-between; align-items:flex-end; gap:40px; margin-bottom:64px; flex-wrap:wrap; }
@@ -290,6 +321,15 @@
   }
   .exp-chip:hover{ border-color:var(--accent); transform:translateY(-3px); box-shadow:0 8px 20px rgb(20 23 28 / .10); }
   .exp-chip img{ width:100%; max-width:132px; max-height:48px; object-fit:contain; }
+  a.exp-chip{ position:relative; cursor:pointer; }
+  /* liten pil i hjørnet viser at logoen kan klikkes */
+  a.exp-chip::after{
+    content:"↗"; position:absolute; top:6px; right:6px; width:20px; height:20px;
+    display:flex; align-items:center; justify-content:center;
+    background:var(--accent); color:var(--accent-text); font-size:11px; line-height:1;
+    transition:transform .2s ease;
+  }
+  a.exp-chip:hover::after{ transform:translate(1px,-1px) scale(1.1); }
   .exp-chip.text-logo{ font-family:var(--font-display); font-weight:600; font-size:18px; letter-spacing:-.02em; }
 
   @media (max-width: 700px){
@@ -325,15 +365,22 @@
   .focus-card p{ font-size:13.5px; color:var(--muted); line-height:1.6; }
 
   /* ============ VIDEO ============ */
+  /* tydelig sølvflate med rutenett */
   .video-section{
-    --bg:var(--ink); --fg:var(--text-dark); --muted:var(--muted-dark); --line:var(--line-dark); --surface:#191D24;
-    background:var(--bg); color:var(--fg);
+    background:
+      repeating-linear-gradient(to right, rgb(20 23 28 / .09) 0 1px, transparent 1px 64px),
+      repeating-linear-gradient(to bottom, rgb(20 23 28 / .09) 0 1px, transparent 1px 64px),
+      radial-gradient(90% 70% at 25% 15%, rgb(255 255 255 / .75), transparent 60%),
+      linear-gradient(135deg, #D9DDE2 0%, #B9BFC7 45%, #D4D8DD 70%, #AEB4BC 100%);
+    background-position:center top;
+    border-top:1px solid #A9AFB7; border-bottom:1px solid #A9AFB7;
   }
   .video-wrap{ position:relative; max-width:980px; margin:0 auto; }
   .video-accent{ position:absolute; inset:18px -18px -18px 18px; background:var(--accent); transform:rotate(-1.2deg); z-index:0; }
   .video-frame{
     position:relative; z-index:1;
     aspect-ratio:16/9; background:#0E1014; border:1px solid var(--line);
+    box-shadow:0 30px 60px rgb(20 23 28 / .18);
   }
   .video-frame video{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; background:#0E1014; }
   .video-frame.is-playing video{ object-fit:contain; }
@@ -407,6 +454,30 @@
   .badge-body{ display:flex; flex-direction:column; flex:1; padding:22px 24px 20px; }
   .badge h3{ font-size:20px; margin-bottom:8px; }
   .badge .role{ font-size:14px; line-height:1.55; color:var(--muted); margin-bottom:20px; }
+  /* praksis-lenke: logo + tekst, tydelig klikkbar */
+  .praksis-link{
+    position:relative; z-index:3;
+    display:flex; align-items:center; gap:12px;
+    margin-bottom:18px; padding:8px 12px 8px 8px;
+    border:1px solid var(--line); background:var(--bg);
+    transition:border-color .2s ease, background .2s ease, box-shadow .2s ease;
+  }
+  .praksis-logo{
+    flex:0 0 auto; width:58px; height:38px; padding:4px;
+    background:#FFFFFF; border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .praksis-logo img{ max-width:100%; max-height:100%; object-fit:contain; }
+  .praksis-text{ display:flex; flex-direction:column; min-width:0; font-size:13.5px; font-weight:600; line-height:1.3; }
+  .praksis-text small{ font-family:var(--font-mono); font-size:10px; font-weight:400; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); }
+  .praksis-arrow{
+    margin-left:auto; width:28px; height:28px; flex:0 0 auto;
+    display:flex; align-items:center; justify-content:center;
+    background:var(--accent); color:var(--accent-text); font-size:14px;
+    transition:transform .25s cubic-bezier(.2,.7,.2,1);
+  }
+  .praksis-link:hover{ border-color:var(--accent); background:rgb(46 125 116 / .08); box-shadow:0 6px 16px rgb(20 23 28 / .08); }
+  .praksis-link:hover .praksis-arrow{ transform:translate(2px,-2px); }
   .badge-links{ display:flex; align-items:center; gap:14px; margin-top:auto; border-top:1px solid var(--line); padding-top:16px; }
   .badge-links a{ font-family:var(--font-mono); font-size:11px; color:var(--muted); transition:color .2s ease; position:relative; z-index:2; }
   .badge-links a:hover{ color:var(--accent); }
@@ -438,11 +509,12 @@
   .profile-dialog h2{ grid-column:2; font-size:clamp(24px, 3vw, 30px); margin-bottom:12px; }
   .profile-bio{ grid-column:2; color:var(--muted); font-size:15px; line-height:1.55; margin-bottom:18px; white-space:pre-line; }
   .profile-dialog .badge-links{ grid-column:2; flex-wrap:wrap; padding-top:12px; }
+  .profile-dialog .praksis-link{ grid-column:2; justify-self:start; min-width:min(320px, 100%); }
   @media (max-width: 600px){
     .profile-dialog{ width:calc(100% - 16px); max-height:calc(100dvh - 16px); padding:16px; }
     .profile-dialog[open]{ grid-template-columns:1fr; }
     .profile-photo{ display:none; }
-    .profile-dialog .eyebrow, .profile-dialog h2, .profile-bio, .profile-dialog .badge-links{ grid-column:1; }
+    .profile-dialog .eyebrow, .profile-dialog h2, .profile-bio, .profile-dialog .badge-links, .profile-dialog .praksis-link{ grid-column:1; }
     .profile-dialog .eyebrow{ display:none; }
     .profile-dialog h2{ font-size:23px; margin-bottom:10px; }
     .profile-bio{ font-size:14px; line-height:1.45; margin-bottom:12px; }
@@ -455,15 +527,79 @@
   }
 
   /* ============ CONTACT ============ */
-  .contact{ position:relative; isolation:isolate; background:var(--bg-soft); overflow:hidden; }
-  .contact::before{ content:""; position:absolute; inset:0; background:url("assets/group-photo.png/GruppebildeNR2.jpg") center/cover no-repeat; opacity:.50; z-index:-2; }
-  .contact::after{ content:""; position:absolute; inset:0; background:var(--bg-soft); opacity:.30; z-index:-1; }
-  .contact-inner{ position:relative; z-index:1; display:grid; grid-template-columns:1.2fr .8fr; gap:60px; align-items:start; }
-  .contact h2{ font-size:clamp(30px,4vw,50px); max-width:520px; margin-bottom:24px; }
-  .contact p{ color:var(--muted); max-width:440px; margin-bottom:36px; font-size:15px; }
-
+  .contact{
+    position:relative; isolation:isolate; overflow:hidden;
+    background:var(--bg); color:var(--fg);
+  }
+  .contact::before{ content:""; position:absolute; inset:-60px; background:url("assets/group-photo.png/Selfie-blur.jpg") center/cover no-repeat; filter:blur(40px) saturate(1.3); opacity:.75; z-index:-2; }
+  .contact::after{ content:""; position:absolute; inset:0; background:linear-gradient(90deg, rgb(236 238 240 / .94) 0%, rgb(236 238 240 / .80) 55%, rgb(236 238 240 / .5) 100%); z-index:-1; }
+  .contact-inner{ position:relative; z-index:1; display:grid; grid-template-columns:1.2fr .8fr; gap:72px; align-items:center; }
+  .contact h2{ font-size:clamp(30px,4vw,50px); line-height:1.1; max-width:560px; margin-bottom:24px; }
+  .contact p{ color:var(--muted); max-width:460px; margin-bottom:36px; font-size:16px; }
+  .contact-actions{ display:flex; flex-wrap:wrap; align-items:center; gap:14px 22px; }
+  .contact .btn.primary{ font-size:14px; padding:16px 28px; }
+  .contact .btn.primary:hover{ background:var(--fg); border-color:var(--fg); color:var(--bg); }
+  .contact-person{ font-size:14px; color:var(--muted); line-height:1.45; }
+  .contact-person b{ display:block; color:var(--fg); font-weight:600; }
+  .contact-person a{ border-bottom:1px solid rgb(20 23 28 / .3); transition:color .2s ease, border-color .2s ease; }
+  .contact-person a:hover{ color:var(--accent); border-color:var(--accent); }
+  .contact-photo{ position:relative; justify-self:end; width:100%; max-width:400px; }
+  .contact-photo::before{ content:""; position:absolute; inset:16px -16px -16px 16px; background:var(--accent); transform:rotate(2deg); }
+  .contact-photo img{ position:relative; aspect-ratio:4/5; width:100%; object-fit:cover; object-position:center 40%; box-shadow:0 30px 60px rgb(20 23 28 / .22); }
   footer{ padding:36px 0; }
   footer .wrap{ display:flex; justify-content:space-between; align-items:center; font-family:var(--font-mono); font-size:11px; color:var(--muted); flex-wrap:wrap; gap:24px; }
+
+  /* ============ SIGNATUR: logo-reveal som avslutning ============ */
+  /* bakgrunnen matcher hjørnefargen i videoen, og kantene tones ut, så filmen smelter inn i flaten */
+  footer.signoff{
+    --muted:var(--muted-dark); --line:#1C2A2B;
+    background:#0D1718; color:var(--text-dark);
+    padding:72px 0 32px; overflow:hidden;
+  }
+  .signoff-stage{ position:relative; width:min(960px, 100%); margin:0 auto 56px; aspect-ratio:1280/420; }
+  .signoff-stage video{
+    position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block;
+    -webkit-mask-image:radial-gradient(ellipse 50% 50% at center, black 78%, transparent 100%);
+            mask-image:radial-gradient(ellipse 50% 50% at center, black 78%, transparent 100%);
+  }
+  footer.signoff .wrap{ border-top:1px solid var(--line); padding-top:28px; }
+  @media (max-width: 700px){
+    footer.signoff{ padding-top:40px; }
+    /* logoen ligger midt i en bred ramme, så vi beskjærer sidene på mobil */
+    .signoff-stage{ width:125%; margin-left:-12.5%; margin-bottom:32px; }
+  }
+
+  /* ============ INTRO: sølvside ved første besøk ============ */
+  .intro{
+    position:fixed; inset:0; z-index:200;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px; padding:24px; text-align:center;
+    background:
+      radial-gradient(120% 90% at 30% 20%, rgb(255 255 255 / .9), transparent 60%),
+      linear-gradient(135deg, #EEF0F2 0%, #D3D7DC 45%, #E9EBEE 70%, #C6CBD1 100%);
+    color:var(--ink); cursor:pointer;
+    transition:opacity .7s ease, visibility .7s ease;
+  }
+  .intro.done{ opacity:0; visibility:hidden; }
+  html.no-intro .intro{ display:none; }
+  .intro-title{
+    font-family:var(--font-display); font-weight:700; letter-spacing:-.03em;
+    font-size:clamp(48px, 10vw, 128px); line-height:1; min-height:1em;
+  }
+  .intro-sub{
+    font-family:var(--font-mono); font-size:clamp(13px, 1.8vw, 18px); letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted-light); min-height:1.5em;
+  }
+  .intro-title .caret, .intro-sub .caret{
+    display:inline-block; width:.08em; min-width:3px; height:.9em; margin-left:.06em; vertical-align:-.08em;
+    background:var(--accent); animation:caret .8s steps(1) infinite;
+  }
+  @keyframes caret{ 50%{ opacity:0; } }
+  .intro-skip{
+    position:absolute; bottom:28px; font-family:var(--font-mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted-light);
+  }
+  /* animasjonen i toppen venter til introen er ferdig */
+  html.intro-on .redact-word::after{ animation-play-state:paused; }
+  html.intro-on body{ overflow:hidden; }
 
   /* ============ REVEAL ON SCROLL ============ */
   .reveal{ opacity:0; transform:translateY(18px); transition:opacity .6s ease, transform .6s ease; }
@@ -474,17 +610,20 @@
     .team-grid{ grid-template-columns:repeat(2, minmax(0,1fr)); gap:16px; }
     .team-grid .badge{ grid-column:auto; }
     .team-grid .badge:last-child{ grid-column:1 / -1; justify-self:center; width:calc(50% - 8px); }
-    .contact-inner{ grid-template-columns:1fr; }
-    .hero-grid{ grid-template-columns:1fr; gap:40px; }
-    .hero-photo-wrap{ order:-1; max-width:420px; width:100%; transform:none; }
-    .hero-grid .hero-content{ width:100%; }
-    .hero-grid .redact-line{ overflow:hidden; }
+    .contact-inner{ grid-template-columns:minmax(0,1fr); gap:56px; }
+    .contact-photo{ justify-self:start; max-width:300px; }
+    .hero-grid{ grid-template-columns:minmax(0,1fr); gap:72px; }
+    .hero-photo-wrap{ order:-1; width:100%; }
+    .hero-polaroid{ left:auto; right:6px; bottom:-48px; width:110px; }
     .nav-links{ display:none; }
     section{ padding:80px 0; }
-    .hero{ padding-top:150px; }
+    .hero{ padding-top:120px; }
+    .hero-photo-accent{ inset:10px -8px -10px 8px; }
   }
 
   @media (max-width: 560px){
+    .hero h1{ font-size:34px; }
+    .redact-word{ white-space:normal; }
     .team-grid{ grid-template-columns:1fr; max-width:400px; margin:0 auto; }
     .team-grid .badge:last-child{ width:auto; justify-self:stretch; }
   }
@@ -496,6 +635,12 @@
 </style>
 </head>
 <body data-mode="light">
+
+  <div class="intro" id="intro" role="presentation">
+    <div class="intro-title" aria-label="Pentastack"><span id="introTitle"></span><span class="caret" id="introCaret1"></span></div>
+    <div class="intro-sub"><span id="introSub"></span></div>
+    <span class="intro-skip">Klikk for å hoppe over</span>
+  </div>
 
   <!-- ============ NAV ============ -->
   <nav class="nav">
@@ -514,6 +659,7 @@
 
   <!-- ============ HERO ============ -->
   <header class="hero">
+    <div class="hero-bg" aria-hidden="true"></div>
     <div class="wrap hero-inner">
       <div class="hero-grid">
         <div class="hero-content">
@@ -534,6 +680,7 @@
 
           <div class="hero-actions">
             <a href="#team" class="btn primary">Møt teamet →</a>
+            <a href="prosjekt.html" class="btn">Se utvalgte prosjekter →</a>
           </div>
 
           <div class="hero-tags">
@@ -548,8 +695,12 @@
         <div class="hero-photo-wrap">
           <div class="hero-photo-accent" aria-hidden="true"></div>
           <div class="hero-photo scan-frame" id="heroPhotoBox">
-            <img id="heroPhotoImg" src="assets/group-photo.png/Gruppebilde.jpg" alt="Gruppebilde" fetchpriority="high">
+            <img id="heroPhotoImg" src="assets/group-photo.png/Gruppebilde.jpg" alt="Gruppebilde av Pentastack" fetchpriority="high">
           </div>
+          <figure class="hero-polaroid">
+            <img src="assets/group-photo.png/Selfie.jpg" alt="Selfie av gruppen" loading="lazy">
+            <figcaption>Refresh IT 2026</figcaption>
+          </figure>
         </div>
       </div>
     </div>
@@ -587,26 +738,26 @@
             <span class="exp-label">Praksis &amp; samarbeid</span>
             <h3>Hvor vi har fått erfaring</h3>
           </div>
-          <p>Bedrifter og organisasjoner vi har hatt praksis, jobb eller verv hos.</p>
+          <p>Bedrifter og organisasjoner vi har hatt praksis, jobb eller verv hos. Klikk på en logo for å lese mer.</p>
         </div>
         <div class="marquee-rows">
           <div class="marquee" style="--speed:40s">
             <div class="marquee-group">
-              <span class="exp-chip"><img src="assets/logos/KPMG.png" alt="KPMG"></span>
-              <span class="exp-chip"><img src="assets/logos/atea.svg" alt="Atea"></span>
-              <span class="exp-chip"><img src="assets/logos/ibm.svg" alt="IBM"></span>
-              <span class="exp-chip"><img src="assets/logos/IK Start.png" alt="IK Start"></span>
-              <span class="exp-chip"><img src="assets/logos/Kristiansand Kommune.png" alt="Kristiansand kommune"></span>
-              <span class="exp-chip"><img src="assets/logos/landmarker.svg" alt="Landmarker"></span>
+              <a class="exp-chip" href="https://kpmg.com/no/nb/om-oss/kontorer/kristiansand.html" target="_blank" rel="noopener" aria-label="KPMG Kristiansand (åpnes i ny fane)"><img src="assets/logos/KPMG.png" alt="KPMG"></a>
+              <a class="exp-chip" href="https://www.atea.no/" target="_blank" rel="noopener" aria-label="Atea (åpnes i ny fane)"><img src="assets/logos/atea.svg" alt="Atea"></a>
+              <a class="exp-chip" href="https://www.ibm.com/no-no" target="_blank" rel="noopener" aria-label="IBM Norge (åpnes i ny fane)"><img src="assets/logos/ibm.svg" alt="IBM"></a>
+              <a class="exp-chip" href="https://www.ikstart.no/" target="_blank" rel="noopener" aria-label="IK Start (åpnes i ny fane)"><img src="assets/logos/IK Start.png" alt="IK Start"></a>
+              <a class="exp-chip" href="https://www.kristiansand.kommune.no/" target="_blank" rel="noopener" aria-label="Kristiansand kommune (åpnes i ny fane)"><img src="assets/logos/Kristiansand Kommune.png" alt="Kristiansand kommune"></a>
+              <a class="exp-chip" href="https://www.linkedin.com/feed/update/urn:li:activity:7461057455624601600/" target="_blank" rel="noopener" aria-label="Landmarker: LinkedIn-innlegg fra CEO om teamet (åpnes i ny fane)"><img src="assets/logos/landmarker.svg" alt="Landmarker"></a>
             </div>
           </div>
           <div class="marquee reverse" style="--speed:34s">
             <div class="marquee-group">
-              <span class="exp-chip"><img src="assets/logos/tenk-tech.svg" alt="Tenk-Tech"></span>
-              <span class="exp-chip"><img src="assets/logos/Techpoint.png" alt="TechPoint"></span>
+              <a class="exp-chip" href="https://www.kode24.no/artikkel/rekordinteresse-for-tenk-naer-1000-jenter-deltok/269203" target="_blank" rel="noopener" aria-label="Tenk-Tech: artikkel i kode24 (åpnes i ny fane)"><img src="assets/logos/tenk-tech.svg" alt="Tenk-Tech"></a>
+              <a class="exp-chip" href="https://www.uia.no/om-uia/fakultet/samfunnsvitenskap/aktuelt/techpoint-future-samlet-elever-uia-studenter-og-ar.html" target="_blank" rel="noopener" aria-label="TechPoint Future: artikkel hos UiA (åpnes i ny fane)"><img src="assets/logos/Techpoint.png" alt="TechPoint"></a>
               <span class="exp-chip text-logo">Akaranga</span>
-              <span class="exp-chip"><img src="assets/logos/Yi2.png" alt="Yi2"></span>
-              <span class="exp-chip"><img src="assets/logos/UIA.png" alt="Universitetet i Agder"></span>
+              <a class="exp-chip" href="https://yi2.no/" target="_blank" rel="noopener" aria-label="Yi2 (åpnes i ny fane)"><img src="assets/logos/Yi2.png" alt="Yi2"></a>
+              <a class="exp-chip" href="https://www.uia.no/" target="_blank" rel="noopener" aria-label="Universitetet i Agder (åpnes i ny fane)"><img src="assets/logos/UIA.png" alt="Universitetet i Agder"></a>
             </div>
           </div>
         </div>
@@ -656,6 +807,11 @@
           <div class="badge-body">
             <h3>Hamdi A Dagane</h3>
             <p class="role">Praktikant på KPMG, Mentor/LA og Teamleder i Landmarker</p>
+            <a class="praksis-link" href="https://ealme.com" target="_blank" rel="noopener" aria-label="Se praksissiden fra KPMG (åpnes i ny fane)">
+              <span class="praksis-logo"><img src="assets/logos/KPMG.png" alt="" loading="lazy"></span>
+              <span class="praksis-text"><small>Praksis hos KPMG</small>Se praksissiden</span>
+              <span class="praksis-arrow" aria-hidden="true">↗</span>
+            </a>
             <div class="badge-links"><a href="mailto:hamdi2005dagane@hotmail.com">Mail</a><a href="https://www.linkedin.com/in/hamdi-a-dagane-592a52226/">LinkedIn</a><a href="https://github.com/Hamdi205">GitHub</a></div>
           </div>
         </article>
@@ -669,6 +825,11 @@
           <div class="badge-body">
             <h3>Laurie Shima Niyongabo</h3>
             <p class="role">Praktikant hos IBM, Utvikler for Akaranga og trainee hos Landmarker</p>
+            <a class="praksis-link" href="https://laurieniyongabo.github.io/praksis-hos-ibm/" target="_blank" rel="noopener" aria-label="Se praksissiden fra IBM (åpnes i ny fane)">
+              <span class="praksis-logo"><img src="assets/logos/ibm.svg" alt="" loading="lazy"></span>
+              <span class="praksis-text"><small>Praksis hos IBM</small>Se praksissiden</span>
+              <span class="praksis-arrow" aria-hidden="true">↗</span>
+            </a>
             <div class="badge-links"><a href="mailto:laurie.niyongabo@gmail.com">Mail</a><a href="https://www.linkedin.com/in/laurie-shima-niyongabo-3408b9352/">LinkedIn</a><a href="https://github.com/laurieniyongabo">GitHub</a></div>
           </div>
         </article>
@@ -682,6 +843,11 @@
           <div class="badge-body">
             <h3>Elias Simossa Rike Nahiry</h3>
             <p class="role">Praktikant hos IK Start, Mentor/LA og trainee hos Landmarker</p>
+            <a class="praksis-link" href="https://fahrtingit.github.io/" target="_blank" rel="noopener" aria-label="Se praksissiden fra IK Start (åpnes i ny fane)">
+              <span class="praksis-logo"><img src="assets/logos/IK Start.png" alt="" loading="lazy"></span>
+              <span class="praksis-text"><small>Praksis hos IK Start</small>Se praksissiden</span>
+              <span class="praksis-arrow" aria-hidden="true">↗</span>
+            </a>
             <div class="badge-links"><a href="mailto:esnahiry@uia.no">Mail</a><a href="https://www.linkedin.com/in/elias-nahiry-025734388/">LinkedIn</a><a href="https://github.com/eliasnahiry">GitHub</a></div>
           </div>
         </article>
@@ -695,6 +861,11 @@
           <div class="badge-body">
             <h3>Erza Malici</h3>
             <p class="role">Praktikant hos Atea, arrangør av Techpoint Future, og trainee hos Landmarker</p>
+            <a class="praksis-link" href="https://erzamalici.github.io/nettside_praksis/" target="_blank" rel="noopener" aria-label="Se praksissiden fra Atea (åpnes i ny fane)">
+              <span class="praksis-logo"><img src="assets/logos/atea.svg" alt="" loading="lazy"></span>
+              <span class="praksis-text"><small>Praksis hos Atea</small>Se praksissiden</span>
+              <span class="praksis-arrow" aria-hidden="true">↗</span>
+            </a>
             <div class="badge-links"><a href="mailto:erzam@uia.no">Mail</a><a href="https://www.linkedin.com/in/erza-malici/">LinkedIn</a><a href="https://github.com/erzamalici">GitHub</a></div>
           </div>
         </article>
@@ -708,6 +879,11 @@
           <div class="badge-body">
             <h3>Jabir M. Gutale</h3>
             <p class="role">Praktikant hos Kristiansand Kommune, LA og trainee hos Landmarker</p>
+            <a class="praksis-link" href="https://praksis-i-kristiansand-kommune-f6avada4atbnemcf.germanywestcentral-01.azurewebsites.net/prosjekt" target="_blank" rel="noopener" aria-label="Se praksissiden fra Kristiansand kommune (åpnes i ny fane)">
+              <span class="praksis-logo"><img src="assets/logos/kristiansand-kommune-small.png" alt="" loading="lazy"></span>
+              <span class="praksis-text"><small>Praksis hos Kristiansand kommune</small>Se praksissiden</span>
+              <span class="praksis-arrow" aria-hidden="true">↗</span>
+            </a>
             <div class="badge-links"><a href="mailto:Jabirmg1911@gmail.com">Mail</a><a href="https://www.linkedin.com/in/jabir-mahamoud-gutale-a01a89219/">LinkedIn</a><a href="https://github.com/JabirMAG">GitHub</a></div>
           </div>
         </article>
@@ -741,11 +917,23 @@
         <div class="eyebrow">Åpen for samarbeid</div>
         <h2>Har dere en problemstilling innen backend, sikkerhet eller fullstack?</h2>
         <p>Vi ønsker å samarbeide med en bedrift om en reell problemstilling for vår bacheloroppgave. Ta kontakt, så tar vi en prat.</p>
+        <div class="contact-actions">
+          <a class="btn primary" href="mailto:hamdi2005dagane@hotmail.com?subject=Samarbeid%20om%20bacheloroppgave%20%E2%80%93%20Pentastack">Send oss en mail →</a>
+          <span class="contact-person"><b>Hamdi A Dagane · Gruppeleder</b><a href="mailto:hamdi2005dagane@hotmail.com">hamdi2005dagane@hotmail.com</a></span>
+        </div>
+      </div>
+      <div class="contact-photo reveal">
+        <img src="assets/group-photo.png/Selfie.jpg" alt="Pentastack samlet på Refresh IT" loading="lazy">
       </div>
     </div>
   </section>
 
-  <footer>
+  <footer class="signoff">
+    <div class="signoff-stage" aria-hidden="true">
+      <video id="logoReveal" muted playsinline preload="none" poster="assets/video/logo-reveal-poster.jpg" tabindex="-1">
+        <source src="assets/video/logo-reveal.mp4" type="video/mp4">
+      </video>
+    </div>
     <div class="wrap">
       <span>© 2026 PENTASTACK</span>
       <span>BYGGET FOR REFRESH IT</span>
@@ -792,6 +980,10 @@
         var links = document.getElementById('profileLinks');
         links.replaceChildren();
         card.querySelectorAll('.badge-links a').forEach(function(link){ links.appendChild(link.cloneNode(true)); });
+        var oldPraksis = dialog.querySelector('.praksis-link');
+        if(oldPraksis) oldPraksis.remove();
+        var praksis = card.querySelector('.praksis-link');
+        if(praksis) dialog.insertBefore(praksis.cloneNode(true), links);
         opener = trigger;
         dialog.showModal();
         document.body.classList.add('profile-open');
@@ -832,15 +1024,84 @@
       items.forEach(function(item){
         var copy = item.cloneNode(true);
         copy.setAttribute('aria-hidden', 'true');
+        if(copy.tagName === 'A') copy.tabIndex = -1;
         copy.querySelectorAll('img').forEach(function(img){ img.alt = ''; });
         group.appendChild(copy);
       });
     }
     var clone = group.cloneNode(true);
     clone.setAttribute('aria-hidden', 'true');
+    clone.querySelectorAll('a').forEach(function(a){ a.tabIndex = -1; });
     clone.querySelectorAll('img').forEach(function(img){ img.alt = ''; });
     row.appendChild(clone);
   });
+
+  // Logo-reveal i footeren: last inn når den nærmer seg, spill av én gang når den er godt synlig.
+  (function(){
+    var video = document.getElementById('logoReveal');
+    if(!video || !('IntersectionObserver' in window)) return;
+    if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return; // posteren viser ferdig logo
+    video.poster = 'assets/video/logo-reveal-start.jpg'; // første bilde, så det ikke hopper når filmen starter
+    var preload = new IntersectionObserver(function(entries){
+      if(entries[0].isIntersecting){ video.preload = 'auto'; video.load(); preload.disconnect(); }
+    }, { rootMargin: '600px 0px' });
+    var trigger = new IntersectionObserver(function(entries){
+      if(entries[0].isIntersecting){
+        trigger.disconnect();
+        var p = video.play();
+        if(p && p.catch) p.catch(function(){});
+      }
+    }, { threshold: .6 });
+    preload.observe(video);
+    trigger.observe(video);
+  })();
+
+  // Intro: skriv navnet og undertittelen, og ton ut
+  (function(){
+    var intro = document.getElementById('intro');
+    var root = document.documentElement;
+    if(!intro || root.classList.contains('no-intro')) return;
+    var title = document.getElementById('introTitle');
+    var sub = document.getElementById('introSub');
+    var caret = document.getElementById('introCaret1');
+    var timers = [];
+    var finished = false;
+    function finish(){
+      if(finished) return;
+      finished = true;
+      timers.forEach(clearTimeout);
+      try{ sessionStorage.setItem('pentastackIntro', '1'); }catch(e){}
+      intro.classList.add('done');
+      root.classList.remove('intro-on');
+      setTimeout(function(){ intro.remove(); }, 800);
+    }
+    function type(el, text, speed, done){
+      var i = 0;
+      (function next(){
+        el.textContent = text.slice(0, ++i);
+        timers.push(setTimeout(i < text.length ? next : done, speed));
+      })();
+    }
+    intro.addEventListener('click', finish);
+    document.addEventListener('keydown', function(e){ if(e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') finish(); });
+    if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+      title.textContent = 'Pentastack';
+      sub.textContent = 'Fem utviklere klare for nytt arbeid';
+      timers.push(setTimeout(finish, 1400));
+      return;
+    }
+    timers.push(setTimeout(function(){
+      type(title, 'Pentastack', 110, function(){
+        timers.push(setTimeout(function(){
+          caret.remove();
+          sub.parentNode.appendChild(caret);
+          type(sub, 'Fem utviklere klare for nytt arbeid', 38, function(){
+            timers.push(setTimeout(finish, 1100));
+          });
+        }, 250));
+      });
+    }, 350));
+  })();
 
   // scroll reveal
   var io = new IntersectionObserver(function(entries){
